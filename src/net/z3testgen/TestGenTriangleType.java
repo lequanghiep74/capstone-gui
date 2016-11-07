@@ -74,10 +74,6 @@ public class TestGenTriangleType {
             writer.append("" + m.eval(m.getConstInterp(m.getConstDecls()[3]), false));
             writer.append('\n');
 
-            System.out.println(m.getConstDecls()[1].getName());
-            System.out.println(m.getConstDecls()[0].getName());
-            System.out.println(m.getConstDecls()[2].getName());
-
             // seek to "next" model, remove repeated value
             s.add(
                     ctx.mkOr(
