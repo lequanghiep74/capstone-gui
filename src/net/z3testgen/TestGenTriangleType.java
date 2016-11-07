@@ -34,11 +34,6 @@ public class TestGenTriangleType {
         IntExpr a = ctx.mkIntConst("a");
         IntExpr b = ctx.mkIntConst("b");
         IntExpr c = ctx.mkIntConst("c");
-        IntExpr aa;
-        IntExpr bb;
-        IntExpr cc;
-        IntExpr tong;
-        Expr f;
 
 // range of value
         int max = Integer.MAX_VALUE;
@@ -73,7 +68,6 @@ public class TestGenTriangleType {
         //finding all satisfiable models
         s.add(expr);
 
-
         int i = 0;
         while (s.check() == Status.SATISFIABLE) {
             i++;
@@ -85,58 +79,30 @@ public class TestGenTriangleType {
 
             m = s.getModel(); // get value and print out
 
-            //get variable name
-//			 a =  ctx.mkIntConst(m.getConstDecls()[1].getName());
-//			 b =  ctx.mkIntConst(m.getConstDecls()[0].getName());
-//			 c =  ctx.mkIntConst(m.getConstDecls()[2].getName());
-
-            // get value from the model and asign to variable aa,bb,cc
-            aa = (IntExpr) m.eval(m.getConstInterp(m.getConstDecls()[1]), false);
-            bb = (IntExpr) m.eval(m.getConstInterp(m.getConstDecls()[0]), false);
-            cc = (IntExpr) m.eval(m.getConstInterp(m.getConstDecls()[2]), false);
-            tong = (IntExpr) ctx.mkAdd(aa, bb, cc);
-            f = m.eval(m.getConstInterp(m.getConstDecls()[3]), false);
             //Check values and remark the properties of variable's value
-            if (Integer.parseInt(aa.toString()) == Integer.parseInt(LBound.toString())) {
-                writer.append("" + aa + "(LBound)");
-            } else if (Integer.parseInt(aa.toString()) == Integer.parseInt(UBound.toString())) {
-                writer.append("" + aa + "(UBound)");
-            } else
-                writer.append("" + m.eval(m.getConstInterp(m.getConstDecls()[1]), false));
+            writer.append("" + m.eval(m.getConstInterp(m.getConstDecls()[0]), false));
             writer.append(',');
-            if (Integer.parseInt(bb.toString()) == Integer.parseInt(LBound.toString())) {
-                writer.append("" + bb + "(LBound)");
-            } else if (Integer.parseInt(bb.toString()) == Integer.parseInt(UBound.toString())) {
-                //} else if (bb.toString()==UBound.toString()){
-                writer.append("" + bb + "(UBound)");
-            } else
-                writer.append("" + m.eval(m.getConstInterp(m.getConstDecls()[0]), false));
+            writer.append("" + m.eval(m.getConstInterp(m.getConstDecls()[1]), false));
             writer.append(',');
-            if (Integer.parseInt(cc.toString()) == Integer.parseInt(LBound.toString())) {
-                writer.append("" + cc + "(LBound)");
-            } else if (Integer.parseInt(cc.toString()) == Integer.parseInt(UBound.toString())) {
-                writer.append("" + cc + "(UBound)");
-            } else
-                writer.append("" + m.eval(m.getConstInterp(m.getConstDecls()[2]), false));
+            writer.append("" + m.eval(m.getConstInterp(m.getConstDecls()[2]), false));
             writer.append(',');
             writer.append("" + m.eval(m.getConstInterp(m.getConstDecls()[3]), false));
             writer.append('\n');
 
-
-            //	TestData.add(new TriangleType1(aa,bb,cc,m.eval(m.getConstInterp(m.getConstDecls()[3]), false)));
-/*
- * add constraints
- * 	0< a,b,c <= max (max value is "artificial” bounds; maybe 100, 2000, or Integer.MAX_VALUE)
- */
-            s.add(ctx.mkAnd(ctx.mkGt(a, ctx.mkInt(min)), ctx.mkGt(b, ctx.mkInt(min)), ctx.mkGt(c, ctx.mkInt(min)),
-                    ctx.mkLe(a, ctx.mkInt(max)), ctx.mkLe(b, ctx.mkInt(max)), ctx.mkLe(c, ctx.mkInt(max))));
+            System.out.println(m.getConstDecls()[0].getName());
+            System.out.println(m.getConstDecls()[1].getName());
+            System.out.println(m.getConstDecls()[2].getName());
+            System.out.println(m.getConstDecls()[3].getName());
 
             // seek to "next" model, remove repeated value
-            s.add(ctx.mkOr(ctx.mkEq(ctx.mkEq(a, m.eval(m.getConstInterp(m.getConstDecls()[1]), false)), ctx.mkFalse()),
-                    ctx.mkEq(ctx.mkEq(b, m.eval(m.getConstInterp(m.getConstDecls()[0]), false)), ctx.mkFalse()),
-                    ctx.mkEq(ctx.mkEq(c, m.eval(m.getConstInterp(m.getConstDecls()[2]), false)), ctx.mkFalse())
-                    // ctx.mkAnd(ctx.mkEq(ctx.mkEq(tong, ctx.mkAdd(a,b,c)), ctx.mkFalse()),ctx.mkEq(ctx.mkEq(f,m.eval(m.getConstInterp(m.getConstDecls()[3]), false) ),ctx.mkFalse()))
-            ));
+            s.add(
+                    ctx.mkOr(
+                            ctx.mkEq(ctx.mkEq(a, m.eval(m.getConstInterp(m.getConstDecls()[1]), false)), ctx.mkFalse()),
+                            ctx.mkEq(ctx.mkEq(b, m.eval(m.getConstInterp(m.getConstDecls()[0]), false)), ctx.mkFalse()),
+                            ctx.mkEq(ctx.mkEq(c, m.eval(m.getConstInterp(m.getConstDecls()[2]), false)), ctx.mkFalse())
+                            // ctx.mkAnd(ctx.mkEq(ctx.mkEq(tong, ctx.mkAdd(a,b,c)), ctx.mkFalse()),ctx.mkEq(ctx.mkEq(f,m.eval(m.getConstInterp(m.getConstDecls()[3]), false) ),ctx.mkFalse()))
+                    )
+            );
 /*
  *  add new constraint LBound <= a,b,c <=UBound
  *  using boundary values,and heuristic a >= LB <=> a = LB \/ a = LB+1 \/ a > LB
@@ -163,7 +129,7 @@ public class TestGenTriangleType {
             //only EQUI
             //s.add(ctx.mkAnd(ctx.mkEq(a, b),ctx.mkEq(b, c) ));
              /*
-			  *
+              *
 			  * ---- only ISO
 			 s.add(ctx.mkOr(ctx.mkAnd(ctx.mkEq(a, b),ctx.mkNot(ctx.mkEq(b, c)) ),
 					 ctx.mkAnd(ctx.mkEq(b, c),ctx.mkNot(ctx.mkEq(c, a)) ),
@@ -172,64 +138,6 @@ public class TestGenTriangleType {
 					// */
         }
 
-// Generate Invalid input values
-        si.add(expr);
-        // m = si.getModel(); // get value and print out
-//		 a =  ctx.mkIntConst(m.getConstDecls()[1].getName());// get variable name (symbol)
-//		 b =  ctx.mkIntConst(m.getConstDecls()[0].getName());
-//		 c =  ctx.mkIntConst(m.getConstDecls()[2].getName());
-        si.add(ctx.mkOr(ctx.mkAnd(ctx.mkGt(a, UBound), ctx.mkGt(b, UBound), ctx.mkGt(c, UBound)),
-                ctx.mkAnd(ctx.mkLt(a, LBound), ctx.mkLt(b, LBound), ctx.mkLt(c, LBound))));
-
-        int j = 0;
-        while (si.check() == Status.SATISFIABLE && j < 6) {
-//			 TriangleType1 TT = new TriangleType1();
-            p.add("random_seed", j);
-            si.setParameters(p);
-            m = si.getModel(); // get value and print out
-            aa = (IntExpr) m.eval(m.getConstInterp(m.getConstDecls()[1]), false);
-            bb = (IntExpr) m.eval(m.getConstInterp(m.getConstDecls()[0]), false);
-            cc = (IntExpr) m.eval(m.getConstInterp(m.getConstDecls()[2]), false);
-
-
-            writer.append("" + aa);
-            writer.append(',');
-            writer.append("" + bb);
-            writer.append(',');
-            writer.append("" + cc);
-            writer.append(',');
-            writer.append("INVALID");
-            writer.append('\n');
-
-            //	}
-            // seek to next invalid model
-
-            si.add(ctx.mkOr(ctx.mkEq(ctx.mkEq(a, m.eval(m.getConstInterp(m.getConstDecls()[1]), false)), ctx.mkFalse()),
-                    ctx.mkEq(ctx.mkEq(b, m.eval(m.getConstInterp(m.getConstDecls()[0]), false)), ctx.mkFalse()),
-                    ctx.mkEq(ctx.mkEq(c, m.eval(m.getConstInterp(m.getConstDecls()[2]), false)), ctx.mkFalse())
-            ));
-            j++;
-        }
-//			write data into array TestData
-//		 TT.sideA = aa;
-//		 TT.sideB = bb;
-//		 TT.sideC = cc;
-//		 TT.type = m.eval(m.getConstInterp(m.getConstDecls()[3]), false);
-//		 TestData.add(new TriangleType1(aa,bb,cc,m.eval(m.getConstInterp(m.getConstDecls()[3]), false)));
-
-//		  //Sap xep!
-////	        Collections.sort(TestData, new Comparator<TriangleType1>());
-//		 for (int k=0;k<TestData.size();k++){
-//			 writer.append(""+TestData.get(k).sideA);
-//			 writer.append(',');
-//			 writer.append(""+TestData.get(k).sideB);
-//			 writer.append(',');
-//			 writer.append(""+TestData.get(k).sideC);
-//			 writer.append(',');
-//			 writer.append(""+TestData.get(k).type);
-//			 writer.append('\n');
-//		 }
-        // Close file
         long t_diff2 = ((new Date()).getTime() - before.getTime());// / 1000;
         System.out.println("SMT2 file test took " + t_diff2 + " ms");
         writer.flush();
