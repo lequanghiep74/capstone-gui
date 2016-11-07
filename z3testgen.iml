@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="EclipseModuleManager">
+    <libelement value="file://E:/eclipse/plugins/weka.jar" />
+    <libelement value="file://C:/Z3/z3solver432/bin/jSMTLIB.jar" />
+    <libelement value="jar://$USER_HOME$/Downloads/z3-4.3.2-x64-win/bin/com.microsoft.z3.jar!/" />
+    <src_description expected_position="0">
+      <src_folder value="file://$MODULE_DIR$/src" expected_position="0" />
+    </src_description>
+  </component>
+  <component name="NewModuleRootManager" inherit-compiler-output="false">
+    <output url="file://$MODULE_DIR$/bin" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+    </content>
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="module-library" exported="">
+      <library name="jSMTLIB.jar">
+        <CLASSES>
+          <root url="file://C:/Z3/z3solver432/bin/jSMTLIB.jar" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library name="weka.jar">
+        <CLASSES>
+          <root url="file://E:/eclipse/plugins/weka.jar" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library name="com.microsoft.z3.jar">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Downloads/z3-4.3.2-x64-win/bin/com.microsoft.z3.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" exported="" name="lib" level="project" />
+  </component>
+</module>
