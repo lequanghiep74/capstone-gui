@@ -77,11 +77,20 @@ public class TestGenTriangleType {
             // seek to "next" model, remove repeated value
             s.add(
                     ctx.mkOr(
-                            ctx.mkEq(ctx.mkEq(a, m.eval(m.getConstInterp(m.getConstDecls()[1]), false)), ctx.mkFalse()),
-                            ctx.mkEq(ctx.mkEq(b, m.eval(m.getConstInterp(m.getConstDecls()[0]), false)), ctx.mkFalse()),
-                            ctx.mkEq(ctx.mkEq(c, m.eval(m.getConstInterp(m.getConstDecls()[2]), false)), ctx.mkFalse())
+                            ctx.mkEq(ctx.mkEq(a, m.eval(m.getConstInterp(m.getConstDecls()[1]), false)), ctx.mkFalse())
                     )
             );
+            s.add(
+                    ctx.mkOr(
+                            ctx.mkEq(ctx.mkEq(a, m.eval(m.getConstInterp(m.getConstDecls()[0]), false)), ctx.mkFalse())
+                    )
+            );
+            s.add(
+                    ctx.mkOr(
+                            ctx.mkEq(ctx.mkEq(a, m.eval(m.getConstInterp(m.getConstDecls()[2]), false)), ctx.mkFalse())
+                    )
+            );
+
         }
 
         long t_diff2 = ((new Date()).getTime() - before.getTime());// / 1000;
