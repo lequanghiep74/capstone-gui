@@ -1,0 +1,11 @@
+enum Triangle {}
+precondition {a <= 100 && b <= 100 && c <= 100}
+testcase {
+	"EQUI" a == b && b == c && c == a
+	"ISO" (a == b && a != c) || (c == b && a != c) || (a == c && a != b)
+	"SCA" a != b && a != c && b != c
+	"NOT" a >= b + c || b >= a + c || c >= a + b
+	"INVALID" a < 1 || b < 1 || c < 1 
+}
+function Triangle (int age, int b, int c)
+run
