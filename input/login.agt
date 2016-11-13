@@ -1,0 +1,3 @@
+enum Login {}
+function Login (string user, string pass)
+run

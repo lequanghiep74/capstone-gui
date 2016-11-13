@@ -1,11 +1,17 @@
-enum Triangle {}
-precondition {a <= 100 && b <= 100 && c <= 100}
+enum Triangle {EQUI ISO SCA NOT}
+function Triangle (Int a, Int b, Int c)
+precondition {and (<= 0 a) (<= a 100)  (<= 0 b) (<= b 100) (<= 0 c) (<= c 100)}
+define eq_ab {= a b}
+define eq_bc {= b c}
+define eq_ca {= c a}
+define tri1 {> (+ a b) c }
+define tri2 {> (+ b c) a }
+define tri3 {> (+ a c) b }
+define tri {and tri1 tri2 tri3}
 testcase {
-	"EQUI" a == b && b == c && c == a
-	"ISO" (a == b && a != c) || (c == b && a != c) || (a == c && a != b)
-	"SCA" a != b && a != c && b != c
-	"NOT" a >= b + c || b >= a + c || c >= a + b
-	"INVALID" a < 1 || b < 1 || c < 1 
+	"NOT" not tri
+	"EQUI" and tri eq_ab eq_bc
+	"ISO" or (and tri eq_ab (not eq_bc)) (and tri eq_bc (not eq_ca)) (and tri eq_ca (not eq_ab))
+	"SCA"
 }
-function Triangle (int age, int b, int c)
 run

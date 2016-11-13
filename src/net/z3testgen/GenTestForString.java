@@ -8,17 +8,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
-public class GenTest {
+public class GenTestForString {
 
     @SuppressWarnings("null")
     public static void main(String[] args) throws Z3Exception, IOException {
-        ReadWriteFile readWriteFile = new ReadWriteFile();
-        TranslateDsl translateDsl = new TranslateDsl();
-        List<String> listDslCode = readWriteFile.readFile("input/triangle_new.agt");
-        List<String> listZ3Code = translateDsl.translateMydsl(listDslCode);
-        readWriteFile.writeFile(listZ3Code, "input/z3.smt2");
-        System.out.println("Done Convert.");
-
         Context ctx = new Context();
         Tactic smtTactic = ctx.mkTactic("smt");
 
@@ -26,8 +19,8 @@ public class GenTest {
 
         Tactic using = ctx.usingParams(smtTactic, p);
         //Read and parse file SMT2
-        BoolExpr expr = ctx.parseSMTLIB2File("input/z3.smt2", null, null, null, null);
-        List<String> params = getParam("input/triangle_new.agt");
+        BoolExpr expr = ctx.parseSMTLIB2File("input/login.smt2", null, null, null, null);
+        List<String> params = getParam("input/login.agt");
 
         Solver s = ctx.mkSolver(using);    //invoke SMT solver
         s.setParameters(p);// set the parameter for random-seed
@@ -39,15 +32,15 @@ public class GenTest {
         si.setParameters(p);
         sr.setParameters(p);
 
-        Map<String, IntExpr> listParam = new HashMap<>();
-        for (int i = 0; i < params.size(); i++) {
-            try {
-                String[] components = params.get(i).trim().split(" ");
-                listParam.put(components[1], ctx.mkIntConst(components[1]));
-            } catch (Z3Exception e) {
-                e.printStackTrace();
-            }
-        }
+//        Map<String, > listParam = new HashMap<>();
+//        for (int i = 0; i < params.size(); i++) {
+//            try {
+//                String[] components = params.get(i).trim().split(" ");
+//                listParam.put(components[1], ctx.mkIntConst(components[1]));
+//            } catch (Z3Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
 
 // range of value
         Date before = new Date();
@@ -61,20 +54,20 @@ public class GenTest {
 
         int i = 0;
         while (s.check() == Status.SATISFIABLE && i != 100) {
-            p.add("random_seed", i);
+//            p.add("random_seed", i);
             s.setParameters(p);
 
             m = s.getModel(); // get value and print out
             FuncDecl[] listDecl = m.getConstDecls();
-            if (i == 0) {
-                for (int j = 0; j < listDecl.length; j++) {
-                    writer.append(listDecl[j].getName().toString());
-                    if (j != listDecl.length - 1) {
-                        writer.append(",");
-                    }
-                }
-                writer.append("\n");
-            }
+//            if (i == 0) {
+//                for (int j = 0; j < listDecl.length; j++) {
+//                    writer.append(listDecl[j].getName().toString());
+//                    if (j != listDecl.length - 1) {
+//                        writer.append(",");
+//                    }
+//                }
+//                writer.append("\n");
+//            }
 
             for (int j = 0; j < listDecl.length; j++) {
                 writer.append("" + m.eval(m.getConstInterp(listDecl[j]), false));
@@ -85,16 +78,16 @@ public class GenTest {
             writer.append('\n');
 
             // seek to "next" model, remove repeated value
-            for (int j = 0; j < listDecl.length; j++) {
-                IntExpr intEx = listParam.get(listDecl[j].getName().toString());
-                if (intEx != null) {
-                    s.add(
-                            ctx.mkOr(
-                                    ctx.mkEq(ctx.mkEq(intEx, m.eval(m.getConstInterp(listDecl[j]), false)), ctx.mkFalse())
-                            )
-                    );
-                }
-            }
+//            for (int j = 0; j < listDecl.length; j++) {
+//                IntExpr intEx = listParam.get(listDecl[j].getName().toString());
+//                if (intEx != null) {
+//                    s.add(
+//                            ctx.mkOr(
+//                                    ctx.mkEq(ctx.mkEq(intEx, m.eval(m.getConstInterp(listDecl[j]), false)), ctx.mkFalse())
+//                            )
+//                    );
+//                }
+//            }
             i++;
         }
 
