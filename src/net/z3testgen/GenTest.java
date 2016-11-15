@@ -9,13 +9,12 @@ import java.io.IOException;
 import java.util.*;
 
 public class GenTest {
-
-    @SuppressWarnings("null")
     public static void main(String[] args) throws Z3Exception, IOException {
+        String dslFile = "input/triangle.agt";
+        String outputFile = "output/Triangle5.csv";
         ReadWriteFile readWriteFile = new ReadWriteFile();
         TranslateDsl translateDsl = new TranslateDsl();
-//        List<String> listDslCode = readWriteFile.readFile("input/triangle.agt");
-        List<String> listDslCode = readWriteFile.readFile("input/marry.agt");
+        List<String> listDslCode = readWriteFile.readFile(dslFile);
         List<String> listZ3Code = translateDsl.translateMydsl(listDslCode);
         readWriteFile.writeFile(listZ3Code, "input/z3.smt2");
         System.out.println("Done Convert.");
@@ -28,7 +27,7 @@ public class GenTest {
         Tactic using = ctx.usingParams(smtTactic, p);
         //Read and parse file SMT2
         BoolExpr expr = ctx.parseSMTLIB2File("input/z3.smt2", null, null, null, null);
-        List<String> params = getParam("input/triangle.agt");
+        List<String> params = getParam(dslFile);
 
         Solver s = ctx.mkSolver(using);    //invoke SMT solver
         s.setParameters(p);// set the parameter for random-seed
@@ -63,8 +62,7 @@ public class GenTest {
         long t_diff = ((new Date()).getTime() - before.getTime());// / 1000;
         System.out.println("SMT2 file read time: " + t_diff + " sec");
 
-//        FileWriter writer = new FileWriter("output/Triangle5.csv");
-        FileWriter writer = new FileWriter("output/CanMarry.csv");
+        FileWriter writer = new FileWriter(outputFile);
         System.out.println("model for: Triangle Type");
         //finding all satisfiable models
         s.add(expr);
