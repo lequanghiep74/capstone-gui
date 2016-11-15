@@ -39,7 +39,7 @@ public class TranslateDsl {
                 }
                 codeZ3 += "(declare-fun result ()" + code.split(" ")[1] + ")";
             } else if (code.contains("testcase")) {
-                codeZ3 = "(assert (= result" + "\n";
+                codeZ3 = "(assert (= result";
                 listZ3Code.add(codeZ3);
                 i++;
                 code = listDslCode.get(i).replace("&&", "and").replace("||", "or").trim();
@@ -52,10 +52,10 @@ public class TranslateDsl {
                         String subCode = code.substring(index + 1).trim();
                         String tempCode = itp.infixToPrefixConvert(subCode);
                         codeZ3 += parseNot(tempCode) + "\n";
-                        codeZ3 += code.substring(0, index) + "\n";
+                        codeZ3 += code.substring(0, index);
 
                     } else {
-                        codeZ3 = code.replaceAll("\"", "") + "\n";
+                        codeZ3 = code.replaceAll("\"", "");
                     }
                     listZ3Code.add(codeZ3);
                     open++;
@@ -66,7 +66,7 @@ public class TranslateDsl {
                     codeZ3 += ")";
                 }
                 codeZ3 += "))";
-                listZ3Code.add(parseNot(codeZ3) + "\n");
+                listZ3Code.add(parseNot(codeZ3));
                 codeZ3 = "";
             } else if (code.contains("precondition")) {
                 codeZ3 = "assert ";
@@ -74,7 +74,7 @@ public class TranslateDsl {
                 codeZ3 = "(" + codeZ3 + ")";
             }
             if (codeZ3.length() > 0) {
-                listZ3Code.add(parseNot(codeZ3) + "\n");
+                listZ3Code.add(parseNot(codeZ3));
             }
         }
         return listZ3Code;

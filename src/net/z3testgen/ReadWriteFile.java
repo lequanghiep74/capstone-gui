@@ -32,7 +32,7 @@ public class ReadWriteFile {
         try {
             PrintWriter writer = new PrintWriter(uri, "UTF-8");
             for (int i = 0; i < codeZ3.size(); i++) {
-                writer.print(codeZ3.get(i));
+                writer.println(codeZ3.get(i));
             }
             writer.close();
         } catch (Exception e) {
