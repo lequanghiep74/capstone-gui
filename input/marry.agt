@@ -1,0 +1,10 @@
+enum CanMarry {TRUE FALSE}
+function CanMarry (Int age, Bool isMale)
+precondition {age >= 0 && age <= 150}
+define con1 {age >= 18}
+define con2 {age >= 16 && isMale = false}
+testcase {
+    "TRUE" con1 || con2
+    "FALSE"
+}
+run

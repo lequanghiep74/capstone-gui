@@ -2,11 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3be256a7-2f1e-405a-a8ff-7ad169034856" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/net/z3testgen/Itp.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/input/z3.smt2" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/net/z3testgen/TranslateDsl.class" afterPath="$PROJECT_DIR$/bin/net/z3testgen/TranslateDsl.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/input/marry.agt" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/input/triangle_new.agt" afterPath="$PROJECT_DIR$/input/triangle.agt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/net/z3testgen/GenTest.class" afterPath="$PROJECT_DIR$/bin/net/z3testgen/GenTest.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/input/triangle_new.agt" afterPath="$PROJECT_DIR$/input/triangle_new.agt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/input/canMarry2.smt2" afterPath="$PROJECT_DIR$/input/canMarry2.smt2" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/input/z3.smt2" afterPath="$PROJECT_DIR$/input/z3.smt2" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/output/CanMarry.csv" afterPath="$PROJECT_DIR$/output/CanMarry.csv" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/output/Triangle5.csv" afterPath="$PROJECT_DIR$/output/Triangle5.csv" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/z3testgen/GenTest.java" afterPath="$PROJECT_DIR$/src/net/z3testgen/GenTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/z3testgen/TranslateDsl.java" afterPath="$PROJECT_DIR$/src/net/z3testgen/TranslateDsl.java" />
     </list>
     <ignored path="z3testgen.iws" />
@@ -37,8 +41,8 @@
       <file leaf-file-name="GenTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/net/z3testgen/GenTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="111">
-              <caret line="16" column="77" selection-start-line="16" selection-start-column="77" selection-end-line="16" selection-end-column="77" />
+            <state relative-caret-position="850">
+              <caret line="74" column="31" selection-start-line="74" selection-start-column="31" selection-end-line="74" selection-end-column="31" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -49,24 +53,31 @@
       <file leaf-file-name="TranslateDsl.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/net/z3testgen/TranslateDsl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="98" column="9" selection-start-line="84" selection-start-column="7" selection-end-line="98" selection-end-column="9" />
+            <state relative-caret-position="97">
+              <caret line="29" column="22" selection-start-line="29" selection-start-column="22" selection-end-line="29" selection-end-column="22" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <marker date="1479181630304" expanded="true" signature="3686:4311" ph="//..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Itp.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/net/z3testgen/Itp.java">
+      <file leaf-file-name="canMarry2.smt2" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/input/canMarry2.smt2">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="21" column="46" selection-start-line="21" selection-start-column="46" selection-end-line="21" selection-end-column="46" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="51">
+              <caret line="3" column="27" selection-start-line="3" selection-start-column="27" selection-end-line="3" selection-end-column="27" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="marry.agt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/input/marry.agt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="85">
+              <caret line="5" column="10" selection-start-line="5" selection-start-column="10" selection-end-line="5" selection-end-column="10" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -74,18 +85,8 @@
       <file leaf-file-name="z3.smt2" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/input/z3.smt2">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="10" column="35" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="35" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="triangle_new.agt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/input/triangle_new.agt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="36" selection-start-line="12" selection-start-column="36" selection-end-line="12" selection-end-column="36" />
+            <state relative-caret-position="136">
+              <caret line="8" column="18" selection-start-line="8" selection-start-column="18" selection-end-line="8" selection-end-column="18" />
               <folding />
             </state>
           </provider>
@@ -113,7 +114,6 @@
       <list>
         <option value="$PROJECT_DIR$/.classpath" />
         <option value="$PROJECT_DIR$/src/net/z3testgen/ReadSMTLibFile.java" />
-        <option value="$PROJECT_DIR$/input/canMarry2.smt2" />
         <option value="$PROJECT_DIR$/src/net/z3testgen/TestGenTriangleType.java" />
         <option value="$PROJECT_DIR$/input/login.agt" />
         <option value="$PROJECT_DIR$/input/Triangle.smt2" />
@@ -122,11 +122,13 @@
         <option value="$PROJECT_DIR$/src/net/z3testgen/ReadWriteFile.java" />
         <option value="$PROJECT_DIR$/src/net/z3testgen/itp.java" />
         <option value="$PROJECT_DIR$/src/net/z3testgen/Itp.java" />
-        <option value="$PROJECT_DIR$/src/net/z3testgen/GenTest.java" />
-        <option value="$PROJECT_DIR$/src/net/z3testgen/TranslateDsl.java" />
-        <option value="$PROJECT_DIR$/input/z3.smt2" />
         <option value="$PROJECT_DIR$/input/triangle_new.agt" />
         <option value="$PROJECT_DIR$/output/Triangle5.csv" />
+        <option value="$PROJECT_DIR$/input/canMarry2.smt2" />
+        <option value="$PROJECT_DIR$/input/z3.smt2" />
+        <option value="$PROJECT_DIR$/input/marry.agt" />
+        <option value="$PROJECT_DIR$/src/net/z3testgen/GenTest.java" />
+        <option value="$PROJECT_DIR$/src/net/z3testgen/TranslateDsl.java" />
       </list>
     </option>
   </component>
@@ -807,12 +809,12 @@
       <workItem from="1479025404178" duration="316000" />
       <workItem from="1479039535857" duration="3149000" />
       <workItem from="1479130492601" duration="1929000" />
-      <workItem from="1479177688321" duration="4184000" />
+      <workItem from="1479177688321" duration="5567000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="27973000" />
+    <option name="totallyTimeSpent" value="29356000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -833,6 +835,7 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2065053" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Problems" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32991454" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -844,7 +847,6 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -888,7 +890,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="13" />
+      <option name="time" value="14" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -918,7 +920,6 @@
           <caret line="59" column="52" selection-start-line="59" selection-start-column="52" selection-end-line="59" selection-end-column="52" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1479181630304" expanded="true" signature="3686:4311" ph="//..." />
           </folding>
         </state>
       </provider>
@@ -941,7 +942,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/input/triangle_new.agt">
+    <entry file="file://$PROJECT_DIR$/input/triangle.agt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -965,7 +966,6 @@
           <caret line="27" column="108" selection-start-line="27" selection-start-column="108" selection-end-line="27" selection-end-column="108" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1479181630304" expanded="true" signature="3686:4311" ph="//..." />
           </folding>
         </state>
       </provider>
@@ -988,7 +988,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/input/triangle_new.agt">
+    <entry file="file://$PROJECT_DIR$/input/triangle.agt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
           <caret line="4" column="20" selection-start-line="4" selection-start-column="20" selection-end-line="4" selection-end-column="20" />
@@ -1173,24 +1173,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/input/Football.smt2">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/input/Football2.smt2">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/input/canMarry2.smt2">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="19" selection-start-line="5" selection-start-column="19" selection-end-line="5" selection-end-column="19" />
         </state>
       </provider>
     </entry>
@@ -1249,24 +1235,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/z3testgen/GenTest.java">
+    <entry file="file://$PROJECT_DIR$/output/Football.csv">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="111">
-          <caret line="16" column="77" selection-start-line="16" selection-start-column="77" selection-end-line="16" selection-end-column="77" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="68">
+          <caret line="4" column="8" selection-start-line="4" selection-start-column="8" selection-end-line="4" selection-end-column="8" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/z3testgen/TranslateDsl.java">
+    <entry file="file://$PROJECT_DIR$/input/Football.smt2">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="98" column="9" selection-start-line="84" selection-start-column="7" selection-end-line="98" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <marker date="1479181630304" expanded="true" signature="3686:4311" ph="//..." />
-          </folding>
+        <state relative-caret-position="102">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1280,26 +1261,70 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/output/Triangle5.csv">
+    <entry file="file://$PROJECT_DIR$/input/triangle.agt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-744">
-          <caret line="39" column="12" selection-start-line="39" selection-start-column="12" selection-end-line="39" selection-end-column="12" />
+        <state relative-caret-position="51">
+          <caret line="3" column="20" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/input/triangle_new.agt">
+    <entry file="file://$PROJECT_DIR$/output/Triangle5.csv">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="36" selection-start-line="12" selection-start-column="36" selection-end-line="12" selection-end-column="36" />
+        <state relative-caret-position="-897">
+          <caret line="30" column="13" selection-start-line="30" selection-start-column="13" selection-end-line="30" selection-end-column="13" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/output/CanMarry.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="7" selection-start-line="5" selection-start-column="7" selection-end-line="5" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/input/canMarry2.smt2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="27" selection-start-line="3" selection-start-column="27" selection-end-line="3" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/input/marry.agt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="10" selection-start-line="5" selection-start-column="10" selection-end-line="5" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/z3testgen/GenTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="850">
+          <caret line="74" column="31" selection-start-line="74" selection-start-column="31" selection-end-line="74" selection-end-column="31" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/z3testgen/TranslateDsl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="97">
+          <caret line="29" column="22" selection-start-line="29" selection-start-column="22" selection-end-line="29" selection-end-column="22" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/input/z3.smt2">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="10" column="35" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="35" />
+        <state relative-caret-position="136">
+          <caret line="8" column="18" selection-start-line="8" selection-start-column="18" selection-end-line="8" selection-end-column="18" />
           <folding />
         </state>
       </provider>

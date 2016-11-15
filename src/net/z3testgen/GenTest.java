@@ -14,7 +14,8 @@ public class GenTest {
     public static void main(String[] args) throws Z3Exception, IOException {
         ReadWriteFile readWriteFile = new ReadWriteFile();
         TranslateDsl translateDsl = new TranslateDsl();
-        List<String> listDslCode = readWriteFile.readFile("input/triangle_new.agt");
+//        List<String> listDslCode = readWriteFile.readFile("input/triangle.agt");
+        List<String> listDslCode = readWriteFile.readFile("input/marry.agt");
         List<String> listZ3Code = translateDsl.translateMydsl(listDslCode);
         readWriteFile.writeFile(listZ3Code, "input/z3.smt2");
         System.out.println("Done Convert.");
@@ -27,7 +28,7 @@ public class GenTest {
         Tactic using = ctx.usingParams(smtTactic, p);
         //Read and parse file SMT2
         BoolExpr expr = ctx.parseSMTLIB2File("input/z3.smt2", null, null, null, null);
-        List<String> params = getParam("input/triangle_new.agt");
+        List<String> params = getParam("input/triangle.agt");
 
         Solver s = ctx.mkSolver(using);    //invoke SMT solver
         s.setParameters(p);// set the parameter for random-seed
@@ -39,11 +40,19 @@ public class GenTest {
         si.setParameters(p);
         sr.setParameters(p);
 
-        Map<String, IntExpr> listParam = new HashMap<>();
+        Map<String, IntExpr> listParamInt = new HashMap<>();
+        Map<String, BoolExpr> listParamBool = new HashMap<>();
+        Map<String, RealExpr> listParamReal = new HashMap<>();
         for (int i = 0; i < params.size(); i++) {
             try {
                 String[] components = params.get(i).trim().split(" ");
-                listParam.put(components[1], ctx.mkIntConst(components[1]));
+                if (components[0].contains("Int")) {
+                    listParamInt.put(components[1], ctx.mkIntConst(components[1]));
+                } else if (components[0].contains("Real")) {
+                    listParamReal.put(components[1], ctx.mkRealConst(components[1]));
+                } else if (components[0].contains("Bool")) {
+                    listParamBool.put(components[1], ctx.mkBoolConst(components[1]));
+                }
             } catch (Z3Exception e) {
                 e.printStackTrace();
             }
@@ -54,7 +63,8 @@ public class GenTest {
         long t_diff = ((new Date()).getTime() - before.getTime());// / 1000;
         System.out.println("SMT2 file read time: " + t_diff + " sec");
 
-        FileWriter writer = new FileWriter("output/Triangle5.csv");
+//        FileWriter writer = new FileWriter("output/Triangle5.csv");
+        FileWriter writer = new FileWriter("output/CanMarry.csv");
         System.out.println("model for: Triangle Type");
         //finding all satisfiable models
         s.add(expr);
@@ -66,6 +76,7 @@ public class GenTest {
 
             m = s.getModel(); // get value and print out
             FuncDecl[] listDecl = m.getConstDecls();
+            //write header
             if (i == 0) {
                 for (int j = 0; j < listDecl.length; j++) {
                     writer.append(listDecl[j].getName().toString());
@@ -86,11 +97,27 @@ public class GenTest {
 
             // seek to "next" model, remove repeated value
             for (int j = 0; j < listDecl.length; j++) {
-                IntExpr intEx = listParam.get(listDecl[j].getName().toString());
+                IntExpr intEx = listParamInt.get(listDecl[j].getName().toString());
                 if (intEx != null) {
                     s.add(
                             ctx.mkOr(
                                     ctx.mkEq(ctx.mkEq(intEx, m.eval(m.getConstInterp(listDecl[j]), false)), ctx.mkFalse())
+                            )
+                    );
+                }
+                RealExpr realEx = listParamReal.get(listDecl[j].getName().toString());
+                if (realEx != null) {
+                    s.add(
+                            ctx.mkOr(
+                                    ctx.mkEq(ctx.mkEq(realEx, m.eval(m.getConstInterp(listDecl[j]), false)), ctx.mkFalse())
+                            )
+                    );
+                }
+                BoolExpr boolEx = listParamBool.get(listDecl[j].getName().toString());
+                if (boolEx != null) {
+                    s.add(
+                            ctx.mkOr(
+                                    ctx.mkEq(ctx.mkEq(boolEx, m.eval(m.getConstInterp(listDecl[j]), false)), ctx.mkFalse())
                             )
                     );
                 }

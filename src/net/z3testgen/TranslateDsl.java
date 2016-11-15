@@ -37,12 +37,12 @@ public class TranslateDsl {
                     codeZ3 += "(declare-const " + com[1] + " "
                             + com[0] + ")\n";
                 }
-                codeZ3 += "(declare-fun x ()" + code.split(" ")[1] + ")";
+                codeZ3 += "(declare-fun result ()" + code.split(" ")[1] + ")";
             } else if (code.contains("testcase")) {
-                codeZ3 = "(assert (= x" + "\n";
+                codeZ3 = "(assert (= result" + "\n";
                 listZ3Code.add(codeZ3);
                 i++;
-                code = listDslCode.get(i).trim();
+                code = listDslCode.get(i).replace("&&", "and").replace("||", "or").trim();
                 int open = 0;
                 while (code.charAt(0) != '}') {
                     if (code.lastIndexOf("\"") != code.length() - 1) {
