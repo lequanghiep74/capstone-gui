@@ -12,7 +12,7 @@ public class CreateTestcaseBdd {
         ReadWriteFile readWriteFile = new ReadWriteFile();
         List<String> datas = readWriteFile.readFile(uriDataTest);
         List<String> bdd = readWriteFile.readFile(uriBddFile);
-        bdd.add("Examples:\n");
+        bdd.add("\nExamples:");
         for (String line : datas) {
             bdd.add('|' + line.replace(",", "|") + "|");
         }
