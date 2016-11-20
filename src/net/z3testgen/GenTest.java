@@ -9,9 +9,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class GenTest {
-    public static void main(String[] args) throws Z3Exception, IOException {
-        String dslFile = "input/triangle.agt";
-        String outputFile = "output/Triangle5.csv";
+    public void genTest(String dslFile, String outputFile) throws Z3Exception, IOException {
         ReadWriteFile readWriteFile = new ReadWriteFile();
         TranslateDsl translateDsl = new TranslateDsl();
         List<String> listDslCode = readWriteFile.readFile(dslFile);

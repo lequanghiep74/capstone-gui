@@ -3,8 +3,8 @@ Feature: Triangle
     Given I have three number is <a>, <b> and <c>
     When It is three angle of triangle
     Then It should be <result>
-Examples:
 
+Examples:
 |result|b|a|c|
 |NOT|2|0|1|
 |NOT|1|2|0|
