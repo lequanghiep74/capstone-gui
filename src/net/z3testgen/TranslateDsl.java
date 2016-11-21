@@ -15,12 +15,16 @@ public class TranslateDsl {
                 //loai bo tat ca ky tu ngoac
                 code = code.replaceAll("[*{*}]", "");
                 String[] parts = code.split(" ");
-                codeZ3 = "declare-datatypes () ((" + parts[1];
-                for (int j = 2; j < parts.length; j++) {
-                    codeZ3 += " " + parts[j];
+                String type = code.split(" ")[1];
+                if (!type.contains("Bool") && !type.contains("Int") && !type.contains("Real")) {
+                    codeZ3 = "declare-datatypes () ((" + parts[1];
+                    for (int j = 2; j < parts.length; j++) {
+                        codeZ3 += " " + parts[j];
+                    }
+                    codeZ3 += "))";
+                    codeZ3 = "(" + codeZ3 + ")";
                 }
-                codeZ3 += "))";
-                codeZ3 = "(" + codeZ3 + ")";
+                codeZ3 += "\n(declare-fun result ()" + code.split(" ")[1] + ")";
             } else if (code.contains("define")) {
                 codeZ3 = "define-fun ";
                 codeZ3 += code.split(" ")[1];
@@ -37,7 +41,6 @@ public class TranslateDsl {
                     codeZ3 += "(declare-const " + com[1] + " "
                             + com[0] + ")\n";
                 }
-                codeZ3 += "(declare-fun result ()" + code.split(" ")[1] + ")";
             } else if (code.contains("testcase")) {
                 codeZ3 = "(assert (= result";
                 listZ3Code.add(codeZ3);
