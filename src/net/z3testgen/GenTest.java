@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class GenTest {
@@ -14,17 +15,18 @@ public class GenTest {
         TranslateDsl translateDsl = new TranslateDsl();
         List<String> listDslCode = readWriteFile.readFile(dslFile);
         List<String> listZ3Code = translateDsl.translateMydsl(listDslCode);
-        readWriteFile.writeFile(listZ3Code, "input/z3.smt2");
+        readWriteFile.writeFile(listZ3Code, "z3.smt2");
         System.out.println("Done Convert.");
 
         Context ctx = new Context();
+
         Tactic smtTactic = ctx.mkTactic("smt");
 
         Params p = ctx.mkParams();
 
         Tactic using = ctx.usingParams(smtTactic, p);
         //Read and parse file SMT2
-        BoolExpr expr = ctx.parseSMTLIB2File("input/z3.smt2", null, null, null, null);
+        BoolExpr expr = ctx.parseSMTLIB2File("z3.smt2", null, null, null, null);
         List<String> params = getParam(dslFile);
 
         Solver s = ctx.mkSolver(using);    //invoke SMT solver
@@ -40,6 +42,7 @@ public class GenTest {
         Map<String, IntExpr> listParamInt = new HashMap<>();
         Map<String, BoolExpr> listParamBool = new HashMap<>();
         Map<String, RealExpr> listParamReal = new HashMap<>();
+
         for (int i = 0; i < params.size(); i++) {
             try {
                 String[] components = params.get(i).trim().split(" ");
@@ -84,7 +87,13 @@ public class GenTest {
             }
 
             for (int j = 0; j < listDecl.length; j++) {
-                writer.append("" + m.eval(m.getConstInterp(listDecl[j]), false));
+                String result = m.eval(m.getConstInterp(listDecl[j]), false).toString();
+                if (result.contains("/")) {
+                    DecimalFormat df = new DecimalFormat("#.##");
+                    writer.append("" + df.format(divide(result)));
+                } else {
+                    writer.append("" + result);
+                }
                 if (j != listDecl.length - 1) {
                     writer.append(",");
                 }
@@ -146,5 +155,12 @@ public class GenTest {
 
         in.close();
         return params;
+    }
+
+    public double divide(String math) {
+        int index = math.indexOf("/");
+        String numA = math.substring(0, index);
+        String numB = math.substring(index + 1);
+        return Double.parseDouble(numA) / Double.parseDouble(numB);
     }
 }

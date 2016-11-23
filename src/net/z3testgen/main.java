@@ -1,13 +1,11 @@
 package net.z3testgen;
 
-import com.microsoft.z3.Z3Exception;
 import net.z3testgen.create_test.CreateTestcaseBdd;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 /**
  * Created by lequanghiep on 11/20/2016.
@@ -78,15 +76,11 @@ public class main {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    fileName = getBaseName(dslTextview.getText());
                     genTest.genTest(dslTextview.getText(), dataTextview.getText() + "/" + fileName + ".csv");
-                    JOptionPane optionPane = new JOptionPane("Gen data success", JOptionPane.WARNING_MESSAGE);
-                    JDialog dialog = optionPane.createDialog("Success");
-                    dialog.setAlwaysOnTop(true); // to show top of all other application
-                    dialog.setVisible(true); // to visible the dialog
-                } catch (Z3Exception e1) {
-                    e1.printStackTrace();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
+                    aleart("Success", "Gen bdd success");
+                } catch (Exception e1) {
+                    aleart("Error", e1.getMessage());
                 }
             }
         });
@@ -95,10 +89,7 @@ public class main {
             public void actionPerformed(ActionEvent e) {
                 CreateTestcaseBdd.genTestCaseBdd(dataBddTextview.getText(), bddTextField.getText()
                         , getBaseName(bddTextField.getText()) + "_cucumber.feature");
-                JOptionPane optionPane = new JOptionPane("Gen bdd success", JOptionPane.WARNING_MESSAGE);
-                JDialog dialog = optionPane.createDialog("Success");
-                dialog.setAlwaysOnTop(true); // to show top of all other application
-                dialog.setVisible(true); // to visible the dialog
+                aleart("Success", "Gen bdd success");
             }
         });
         dataBddSelect.addActionListener(new ActionListener() {
@@ -125,12 +116,14 @@ public class main {
         jFrame.setVisible(true);
     }
 
-    public static String getBaseName(String fileName) {
-        int index = fileName.lastIndexOf('.');
-        if (index == -1) {
-            return fileName;
+    public static String getBaseName(String fileDir) {
+        int indexSlash = fileDir.lastIndexOf('\\');
+        fileDir = fileDir.substring(indexSlash + 1);
+        int indexDot = fileDir.lastIndexOf('.');
+        if (indexDot == -1) {
+            return fileDir;
         } else {
-            return fileName.substring(0, index);
+            return fileDir.substring(0, indexDot);
         }
     }
 
@@ -140,12 +133,18 @@ public class main {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             try {
                 txtField.setText(fileChooser.getSelectedFile().getAbsolutePath());
-                fileName = getBaseName(fileChooser.getSelectedFile().getName());
             } catch (Exception ex) {
                 System.out.println("problem accessing file");
             }
         } else {
             System.out.println("File access cancelled by user.");
         }
+    }
+
+    public void aleart(String head, String content) {
+        JOptionPane optionPane = new JOptionPane(content, JOptionPane.WARNING_MESSAGE);
+        JDialog dialog = optionPane.createDialog(head);
+        dialog.setAlwaysOnTop(true); // to show top of all other application
+        dialog.setVisible(true); // to visible the dialog
     }
 }

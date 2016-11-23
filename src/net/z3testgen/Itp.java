@@ -7,7 +7,7 @@ public class Itp {
     public static boolean isOperand(String s) {
         return !(s.equals("+") || s.equals("-") || s.equals("/") || s.equals("*") || s.equals("=") || s.equals(">")
                 || s.equals("<") || s.equals("(") || s.equals(")") || s.equals("and") || s.equals("or")
-                || s.equals("<=") || s.equals(">="));
+                || s.equals("<=") || s.equals(">=") || s.equals("%"));
     }
 
     public static String operationCombine(Stack<String> operatorStack, Stack<String> operandStack) {
@@ -25,7 +25,7 @@ public class Itp {
             return 2;
         else if (s.equals("+") || s.equals("-"))
             return 3;
-        else if (s.equals("/") || s.equals("*"))
+        else if (s.equals("/") || s.equals("*") || s.equals("%"))
             return 4;
         else
             return 0;

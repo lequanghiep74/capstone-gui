@@ -43,7 +43,7 @@ public class TranslateDsl {
                 }
             } else if (code.contains("testcase")) {
                 codeZ3 = "(assert (= result";
-                listZ3Code.add(codeZ3);
+                listZ3Code.add(codeZ3.replace("%", "mod"));
                 i++;
                 code = listDslCode.get(i).replace("&&", "and").replace("||", "or").trim();
                 int open = 0;
@@ -60,7 +60,7 @@ public class TranslateDsl {
                     } else {
                         codeZ3 = code.replaceAll("\"", "");
                     }
-                    listZ3Code.add(codeZ3);
+                    listZ3Code.add(codeZ3.replace("%", "mod"));
                     open++;
                     code = listDslCode.get(++i).replace("&&", "and").replace("||", "or").trim();
                 }
@@ -69,7 +69,7 @@ public class TranslateDsl {
                     codeZ3 += ")";
                 }
                 codeZ3 += "))";
-                listZ3Code.add(parseNot(codeZ3));
+                listZ3Code.add(parseNot(codeZ3).replace("%", "mod"));
                 codeZ3 = "";
             } else if (code.contains("precondition")) {
                 codeZ3 = "assert ";
@@ -77,7 +77,7 @@ public class TranslateDsl {
                 codeZ3 = "(" + codeZ3 + ")";
             }
             if (codeZ3.length() > 0) {
-                listZ3Code.add(parseNot(codeZ3));
+                listZ3Code.add(parseNot(codeZ3).replace("%", "mod"));
             }
         }
         return listZ3Code;
