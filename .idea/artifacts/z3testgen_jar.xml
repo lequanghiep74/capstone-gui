@@ -1,12 +1,13 @@
 <component name="ArtifactManager">
-  <artifact type="jar" build-on-make="true" name="z3testgen:jar">
+  <artifact type="jar" name="z3testgen:jar">
     <output-path>$PROJECT_DIR$/classes/artifacts/z3testgen_jar</output-path>
     <root id="archive" name="z3testgen.jar">
       <element id="module-output" name="z3testgen" />
-      <element id="library" level="module" name="weka.jar" module-name="z3testgen" />
       <element id="extracted-dir" path="$USER_HOME$/Downloads/z3-4.3.2-x64-win/bin/com.microsoft.z3.jar" path-in-jar="/" />
+      <element id="library" level="project" name="bin" />
+      <element id="library" level="module" name="weka.jar" module-name="z3testgen" />
       <element id="library" level="module" name="jSMTLIB.jar" module-name="z3testgen" />
-      <element id="library" level="module" name="com.microsoft.z3.jar" module-name="z3testgen" />
+      <element id="library" level="project" name="com.microsoft.z3" />
     </root>
   </artifact>
 </component>

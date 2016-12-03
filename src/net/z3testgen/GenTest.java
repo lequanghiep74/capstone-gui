@@ -2,6 +2,7 @@ package net.z3testgen;
 
 import com.microsoft.z3.*;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -10,14 +11,20 @@ import java.text.DecimalFormat;
 import java.util.*;
 
 public class GenTest {
-    public void genTest(String dslFile, String outputFile) throws Z3Exception, IOException {
+    private HashMap<String, String> listData;
+
+    public void genTest(String dslFile, String outputFile, JTextArea textArea) throws Z3Exception, IOException {
+        listData = new HashMap<>();
+        Helper helper = new Helper(textArea);
+        helper.setStatus("Begin convert dsl to z3.");
         ReadWriteFile readWriteFile = new ReadWriteFile();
         TranslateDsl translateDsl = new TranslateDsl();
         List<String> listDslCode = readWriteFile.readFile(dslFile);
         List<String> listZ3Code = translateDsl.translateMydsl(listDslCode);
         readWriteFile.writeFile(listZ3Code, "z3.smt2");
-        System.out.println("Done Convert.");
+        helper.setStatus("Done convert.");
 
+        helper.setStatus("Begin gen test.");
         Context ctx = new Context();
 
         Tactic smtTactic = ctx.mkTactic("smt");
@@ -61,15 +68,13 @@ public class GenTest {
 // range of value
         Date before = new Date();
         long t_diff = ((new Date()).getTime() - before.getTime());// / 1000;
-        System.out.println("SMT2 file read time: " + t_diff + " sec");
-
+        helper.setStatus("SMT2 file read time: " + t_diff + " sec");
         FileWriter writer = new FileWriter(outputFile);
-        System.out.println("model for: Triangle Type");
         //finding all satisfiable models
         s.add(expr);
 
         int i = 0;
-        while (s.check() == Status.SATISFIABLE && i != 100) {
+        while (s.check() == Status.SATISFIABLE && i != 200) {
             p.add("random_seed", i);
             s.setParameters(p);
 
@@ -86,19 +91,24 @@ public class GenTest {
                 writer.append("\n");
             }
 
+            String lineData = "";
             for (int j = 0; j < listDecl.length; j++) {
                 String result = m.eval(m.getConstInterp(listDecl[j]), false).toString();
                 if (result.contains("/")) {
-                    DecimalFormat df = new DecimalFormat("#.##");
-                    writer.append("" + df.format(divide(result)));
+                    DecimalFormat df = new DecimalFormat("#.##########");
+                    lineData += df.format(divide(result));
                 } else {
-                    writer.append("" + result);
+                    lineData += result;
                 }
                 if (j != listDecl.length - 1) {
-                    writer.append(",");
+                    lineData += ",";
                 }
             }
-            writer.append('\n');
+            if (!isExistData(lineData)) {
+                writer.append(lineData);
+                writer.append('\n');
+                listData.put(lineData, "");
+            }
 
             // seek to "next" model, remove repeated value
             for (int j = 0; j < listDecl.length; j++) {
@@ -131,11 +141,11 @@ public class GenTest {
         }
 
         long t_diff2 = ((new Date()).getTime() - before.getTime());// / 1000;
-        System.out.println("SMT2 file test took " + t_diff2 + " ms");
+        helper.setStatus("SMT2 file test took " + t_diff2 + " ms");
         writer.flush();
         writer.close();
 
-        System.out.println("Success!");
+        helper.setStatus("Success.");
     }
 
     public static List<String> getParam(String dir) throws FileNotFoundException {
@@ -162,5 +172,9 @@ public class GenTest {
         String numA = math.substring(0, index);
         String numB = math.substring(index + 1);
         return Double.parseDouble(numA) / Double.parseDouble(numB);
+    }
+
+    public boolean isExistData(String data) {
+        return listData.get(data) != null;
     }
 }

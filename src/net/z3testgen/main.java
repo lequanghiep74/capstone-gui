@@ -32,8 +32,10 @@ public class main {
     private JButton bddSelect;
     private JTextField dataBddTextview;
     private JButton genBddBtn;
+    private JTextArea txtStatus;
     private String fileName;
     private GenTest genTest = new GenTest();
+    private Helper helper = new Helper(txtStatus);
 
     public main() {
         tabbedPane = new JTabbedPane();
@@ -65,10 +67,10 @@ public class main {
                     try {
                         dataTextview.setText(fileChooser.getSelectedFile().getPath());
                     } catch (Exception ex) {
-                        System.out.println("problem accessing file");
+                        helper.setStatus("Problem accessing file");
                     }
                 } else {
-                    System.out.println("File access cancelled by user.");
+                    helper.setStatus("File access cancelled by user.");
                 }
             }
         });
@@ -77,10 +79,11 @@ public class main {
             public void actionPerformed(ActionEvent e) {
                 try {
                     fileName = getBaseName(dslTextview.getText());
-                    genTest.genTest(dslTextview.getText(), dataTextview.getText() + "/" + fileName + ".csv");
-                    aleart("Success", "Gen bdd success");
+                    genTest.genTest(dslTextview.getText(), dataTextview.getText() + "/" + fileName + ".csv", txtStatus);
+                    aleart("Success", "Gen bdd success", 1);
                 } catch (Exception e1) {
-                    aleart("Error", e1.getMessage());
+                    aleart("Error", e1.getMessage(), 0);
+                    helper.setStatus(e1.getMessage());
                 }
             }
         });
@@ -89,7 +92,7 @@ public class main {
             public void actionPerformed(ActionEvent e) {
                 CreateTestcaseBdd.genTestCaseBdd(dataBddTextview.getText(), bddTextField.getText()
                         , getBaseName(bddTextField.getText()) + "_cucumber.feature");
-                aleart("Success", "Gen bdd success");
+                aleart("Success", "Gen bdd success", 1);
             }
         });
         dataBddSelect.addActionListener(new ActionListener() {
@@ -141,10 +144,13 @@ public class main {
         }
     }
 
-    public void aleart(String head, String content) {
-        JOptionPane optionPane = new JOptionPane(content, JOptionPane.WARNING_MESSAGE);
+    public static void aleart(String head, String content, int type) {
+        int option = type == 1 ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.ERROR_MESSAGE;
+        JOptionPane optionPane = new JOptionPane(content, option);
         JDialog dialog = optionPane.createDialog(head);
         dialog.setAlwaysOnTop(true); // to show top of all other application
         dialog.setVisible(true); // to visible the dialog
     }
+
+
 }
