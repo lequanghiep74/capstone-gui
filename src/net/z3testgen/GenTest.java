@@ -104,6 +104,7 @@ public class GenTest {
                     lineData += ",";
                 }
             }
+            lineData = lineData.trim();
             if (!isExistData(lineData)) {
                 writer.append(lineData);
                 writer.append('\n');

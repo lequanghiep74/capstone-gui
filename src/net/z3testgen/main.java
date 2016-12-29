@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.PrintStream;
 
 /**
  * Created by lequanghiep on 11/20/2016.
@@ -38,6 +39,12 @@ public class main {
     private Helper helper = new Helper(txtStatus);
 
     public main() {
+        System.setOut(new PrintStream(System.out) {
+            public void println(String s) {
+               helper.setStatus(s);
+            }
+        });
+
         tabbedPane = new JTabbedPane();
         genDslPanel.setLayout(new GridLayout(0, 1));
         genBddPanel.setLayout(new GridLayout(0, 1));
@@ -80,7 +87,7 @@ public class main {
                 try {
                     fileName = getBaseName(dslTextview.getText());
                     genTest.genTest(dslTextview.getText(), dataTextview.getText() + "/" + fileName + ".csv", txtStatus);
-                    aleart("Success", "Gen bdd success", 1);
+                    aleart("Success", "Gen test success", 1);
                 } catch (Exception e1) {
                     aleart("Error", e1.getMessage(), 0);
                     helper.setStatus(e1.getMessage());
@@ -91,7 +98,7 @@ public class main {
             @Override
             public void actionPerformed(ActionEvent e) {
                 CreateTestcaseBdd.genTestCaseBdd(dataBddTextview.getText(), bddTextField.getText()
-                        , getBaseName(bddTextField.getText()) + "_cucumber.feature");
+                        , getDir(bddTextField.getText()) + getBaseName(bddTextField.getText()) + "_cucumber.feature");
                 aleart("Success", "Gen bdd success", 1);
             }
         });
@@ -128,6 +135,11 @@ public class main {
         } else {
             return fileDir.substring(0, indexDot);
         }
+    }
+
+    public static String getDir(String fileDir) {
+        int indexSlash = fileDir.lastIndexOf('\\');
+        return fileDir.substring(0, indexSlash + 1);
     }
 
     public void selectFile(JTextField txtField) {
