@@ -1,23 +1,26 @@
-(declare-datatypes () ((bmi invalid underweight normalweight overweight obesity)))
-(declare-fun result ()bmi)
-(declare-const w Int)
-(declare-const h Int)
-(assert (and (and (and (>= w -1) (<= w 200)) (>= h 0)) (<= h 200)))
-(define-fun con1 ()Bool (< (/ w (/ (* h h) 10000)) 18))
-(define-fun con2 ()Bool (< (/ w (/ (* h h) 10000)) 25))
-(define-fun con3 ()Bool (>= (/ w (/ (* h h) 10000)) 18))
-(define-fun con4 ()Bool (>= (/ w (/ (* h h) 10000)) 25))
-(define-fun con5 ()Bool (< (/ w (/ (* h h) 10000)) 30))
-(define-fun con6 ()Bool (>= (/ w (/ (* h h) 10000)) 30))
+(declare-datatypes () ((Triangle EQUI ISO SCA NOT)))
+(declare-fun result ()Triangle)
+(declare-const a Int)
+(declare-const b Int)
+(declare-const c Int)
+(assert (and (and (and (and (and (>= a 0) (<= a 100)) (>= b 0)) (<= b 100)) (>= c 0)) (<= c 100)))
+(define-fun eq_ab ()Bool (= a b))
+(define-fun eq_bc ()Bool (= b c))
+(define-fun eq_ca ()Bool (= c a))
+(define-fun tri1 ()Bool (> (+ a b) c))
+(define-fun tri2 ()Bool (> (+ b c) a))
+(define-fun tri3 ()Bool (> (+ a c) b))
+(define-fun tri ()Bool (and (and tri1 tri2) tri3))
+(define-fun iso1 ()Bool (and (and tri eq_ab) (not eq_bc)))
+(define-fun iso2 ()Bool (and (and tri eq_bc) (not eq_ca)))
+(define-fun iso3 ()Bool (and (and tri eq_ca) (not eq_ab)))
 (assert (= result
-(if con1
-underweight
-(if (and con2 con3)
-normalweight
-(if (and con5 con4)
-overweight
-(if con6
-obesity
-invalid
-))))))
+(if (not tri)
+NOT
+(if (and (and tri eq_ab) eq_bc)
+EQUI
+(if (or (or iso1 iso2) iso3)
+ISO
+SCA
+)))))
 (check-sat)

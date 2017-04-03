@@ -2,11 +2,10 @@ package net.z3testgen;
 
 import com.microsoft.z3.*;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 
 public class GenTestForString {
 
@@ -20,7 +19,7 @@ public class GenTestForString {
         Tactic using = ctx.usingParams(smtTactic, p);
         //Read and parse file SMT2
         BoolExpr expr = ctx.parseSMTLIB2File("input/login.smt2", null, null, null, null);
-        List<String> params = getParam("input/login.agt");
+        List<String> params = new Helper().getParam("input/login.agt");
 
         Solver s = ctx.mkSolver(using);    //invoke SMT solver
         s.setParameters(p);// set the parameter for random-seed
@@ -97,24 +96,5 @@ public class GenTestForString {
         writer.close();
 
         System.out.println("Success!");
-    }
-
-    public static List<String> getParam(String dir) throws FileNotFoundException {
-        List<String> params = new ArrayList<>();
-        Scanner in = new Scanner(new File(dir));
-
-        while (in.hasNext()) { // iterates each line in the file
-            String line = in.nextLine().trim();
-            if (line.contains("function")) {
-                line = line.substring(line.indexOf('(') + 1, line.length() - 1);
-                String[] listParam = line.split(",");
-                for (String param : listParam) {
-                    params.add(param);
-                }
-            }
-        }
-
-        in.close();
-        return params;
     }
 }

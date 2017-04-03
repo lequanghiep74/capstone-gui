@@ -38,8 +38,10 @@ public class TranslateDsl {
                 String[] params = code.substring(code.indexOf("(") + 1, code.indexOf(")")).split(",");
                 for (int j = 0; j < params.length; j++) {
                     String[] com = params[j].trim().split(" ");
-                    codeZ3 += "(declare-const " + com[1] + " "
-                            + com[0] + ")\n";
+                    if (!com[0].equals("String")) {
+                        codeZ3 += "(declare-const " + com[1] + " "
+                                + com[0] + ")\n";
+                    }
                 }
             } else if (code.contains("testcase")) {
                 codeZ3 = "(assert (= result";

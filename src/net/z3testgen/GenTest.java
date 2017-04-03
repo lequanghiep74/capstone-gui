@@ -3,8 +3,6 @@ package net.z3testgen;
 import com.microsoft.z3.*;
 
 import javax.swing.*;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -15,6 +13,7 @@ public class GenTest {
 
     public void genTest(String dslFile, String outputFile, JTextArea textArea) throws Z3Exception, IOException {
         listData = new HashMap<>();
+        GenString genString = new GenString();
         Helper helper = new Helper(textArea);
         helper.setStatus("Begin convert dsl to z3.");
         ReadWriteFile readWriteFile = new ReadWriteFile();
@@ -32,24 +31,14 @@ public class GenTest {
         Params p = ctx.mkParams();
 
         Tactic using = ctx.usingParams(smtTactic, p);
-        //Read and parse file SMT2
-        BoolExpr expr = ctx.parseSMTLIB2File("z3.smt2", null, null, null, null);
-        List<String> params = getParam(dslFile);
 
-        Solver s = ctx.mkSolver(using);    //invoke SMT solver
-        s.setParameters(p);// set the parameter for random-seed
-        Model m = null;
-
-        Solver si = ctx.mkSolver(using);
-        Solver sr = ctx.mkSolver(using);
-
-        si.setParameters(p);
-        sr.setParameters(p);
-
+        List<String> params = helper.getParam(dslFile);
         Map<String, IntExpr> listParamInt = new HashMap<>();
         Map<String, BoolExpr> listParamBool = new HashMap<>();
         Map<String, RealExpr> listParamReal = new HashMap<>();
+        Map<String, StringCondition> listParamString = new HashMap<>();
 
+        //Get list params
         for (int i = 0; i < params.size(); i++) {
             try {
                 String[] components = params.get(i).trim().split(" ");
@@ -59,113 +48,135 @@ public class GenTest {
                     listParamReal.put(components[1], ctx.mkRealConst(components[1]));
                 } else if (components[0].contains("Bool")) {
                     listParamBool.put(components[1], ctx.mkBoolConst(components[1]));
+                } else if (components[0].contains("String")) {
+                    listParamString.put(components[1], new StringCondition());
                 }
             } catch (Z3Exception e) {
                 e.printStackTrace();
             }
         }
 
-// range of value
-        Date before = new Date();
-        long t_diff = ((new Date()).getTime() - before.getTime());// / 1000;
-        helper.setStatus("SMT2 file read time: " + t_diff + " sec");
-        FileWriter writer = new FileWriter(outputFile);
-        //finding all satisfiable models
-        s.add(expr);
+        //If generate text for more type data
+        if (listParamInt.size() + listParamBool.size() + listParamReal.size() > 0) {
+            //Read and parse file SMT2
+            BoolExpr expr = ctx.parseSMTLIB2File("z3.smt2", null, null, null, null);
 
-        int i = 0;
-        while (s.check() == Status.SATISFIABLE && i != 200) {
-            p.add("random_seed", i);
-            s.setParameters(p);
+            Solver s = ctx.mkSolver(using);    //invoke SMT solver
+            s.setParameters(p);// set the parameter for random-seed
+            Model m = null;
 
-            m = s.getModel(); // get value and print out
-            FuncDecl[] listDecl = m.getConstDecls();
-            //write header
-            if (i == 0) {
-                for (int j = 0; j < listDecl.length; j++) {
-                    writer.append(listDecl[j].getName().toString());
-                    if (j != listDecl.length - 1) {
+            Solver si = ctx.mkSolver(using);
+            Solver sr = ctx.mkSolver(using);
+
+            si.setParameters(p);
+            sr.setParameters(p);
+
+            // range of value
+            Date before = new Date();
+            long t_diff = ((new Date()).getTime() - before.getTime());// / 1000;
+            helper.setStatus("SMT2 file read time: " + t_diff + " sec");
+            FileWriter writer = new FileWriter(outputFile);
+            //finding all satisfiable models
+            s.add(expr);
+
+            listParamString = getListConditionOfStringValue(listDslCode, listParamString);
+
+            int i = 0;
+            while (s.check() == Status.SATISFIABLE && i != 200) {
+                p.add("random_seed", i);
+                s.setParameters(p);
+
+                m = s.getModel(); // get value and print out
+                FuncDecl[] listDecl = m.getConstDecls();
+                //write header
+                if (i == 0) {
+                    List<String> listKey = new ArrayList<>();
+                    for (Map.Entry<String, StringCondition> entry : listParamString.entrySet()) {
+                        listKey.add(entry.getKey());
+                    }
+                    writer.append(String.join(",", listKey));
+
+                    if (listDecl.length > 0) {
                         writer.append(",");
                     }
+
+                    for (int j = 0; j < listDecl.length; j++) {
+                        writer.append(listDecl[j].getName().toString());
+                        if (j != listDecl.length - 1) {
+                            writer.append(",");
+                        }
+                    }
+                    writer.append("\n");
                 }
-                writer.append("\n");
+
+                String lineData = "";
+                List<String> tempData = helper.generateStringData(listParamString);
+                writer.append(String.join(",", tempData));
+
+                if (listDecl.length > 0) {
+                    writer.append(",");
+                }
+
+                for (int j = 0; j < listDecl.length; j++) {
+                    String result = m.eval(m.getConstInterp(listDecl[j]), false).toString();
+                    if (result.contains("/")) {
+                        DecimalFormat df = new DecimalFormat("#.##########");
+                        lineData += df.format(divide(result));
+                    } else {
+                        lineData += result;
+                    }
+                    if (j != listDecl.length - 1) {
+                        lineData += ",";
+                    }
+                }
+                lineData = lineData.trim();
+                if (!isExistData(lineData)) {
+                    writer.append(lineData);
+                    writer.append('\n');
+                    listData.put(lineData, "");
+                }
+
+                // seek to "next" model, remove repeated value
+                for (int j = 0; j < listDecl.length; j++) {
+                    IntExpr intEx = listParamInt.get(listDecl[j].getName().toString());
+                    if (intEx != null) {
+                        s.add(
+                                ctx.mkOr(
+                                        ctx.mkEq(ctx.mkEq(intEx, m.eval(m.getConstInterp(listDecl[j]), false)), ctx.mkFalse())
+                                )
+                        );
+                    }
+                    RealExpr realEx = listParamReal.get(listDecl[j].getName().toString());
+                    if (realEx != null) {
+                        s.add(
+                                ctx.mkOr(
+                                        ctx.mkEq(ctx.mkEq(realEx, m.eval(m.getConstInterp(listDecl[j]), false)), ctx.mkFalse())
+                                )
+                        );
+                    }
+                    BoolExpr boolEx = listParamBool.get(listDecl[j].getName().toString());
+                    if (boolEx != null) {
+                        s.add(
+                                ctx.mkOr(
+                                        ctx.mkEq(ctx.mkEq(boolEx, m.eval(m.getConstInterp(listDecl[j]), false)), ctx.mkFalse())
+                                )
+                        );
+                    }
+                }
+                i++;
             }
 
-            String lineData = "";
-            for (int j = 0; j < listDecl.length; j++) {
-                String result = m.eval(m.getConstInterp(listDecl[j]), false).toString();
-                if (result.contains("/")) {
-                    DecimalFormat df = new DecimalFormat("#.##########");
-                    lineData += df.format(divide(result));
-                } else {
-                    lineData += result;
-                }
-                if (j != listDecl.length - 1) {
-                    lineData += ",";
-                }
-            }
-            lineData = lineData.trim();
-            if (!isExistData(lineData)) {
-                writer.append(lineData);
-                writer.append('\n');
-                listData.put(lineData, "");
-            }
-
-            // seek to "next" model, remove repeated value
-            for (int j = 0; j < listDecl.length; j++) {
-                IntExpr intEx = listParamInt.get(listDecl[j].getName().toString());
-                if (intEx != null) {
-                    s.add(
-                            ctx.mkOr(
-                                    ctx.mkEq(ctx.mkEq(intEx, m.eval(m.getConstInterp(listDecl[j]), false)), ctx.mkFalse())
-                            )
-                    );
-                }
-                RealExpr realEx = listParamReal.get(listDecl[j].getName().toString());
-                if (realEx != null) {
-                    s.add(
-                            ctx.mkOr(
-                                    ctx.mkEq(ctx.mkEq(realEx, m.eval(m.getConstInterp(listDecl[j]), false)), ctx.mkFalse())
-                            )
-                    );
-                }
-                BoolExpr boolEx = listParamBool.get(listDecl[j].getName().toString());
-                if (boolEx != null) {
-                    s.add(
-                            ctx.mkOr(
-                                    ctx.mkEq(ctx.mkEq(boolEx, m.eval(m.getConstInterp(listDecl[j]), false)), ctx.mkFalse())
-                            )
-                    );
-                }
-            }
-            i++;
+            long t_diff2 = ((new Date()).getTime() - before.getTime());// / 1000;
+            helper.setStatus("SMT2 file test took " + t_diff2 + " ms");
+            writer.flush();
+            writer.close();
         }
-
-        long t_diff2 = ((new Date()).getTime() - before.getTime());// / 1000;
-        helper.setStatus("SMT2 file test took " + t_diff2 + " ms");
-        writer.flush();
-        writer.close();
+        //If generate test for only String data type
+        else {
+            genString.genString(outputFile, listDslCode, params);
+        }
 
         helper.setStatus("Success.");
-    }
-
-    public static List<String> getParam(String dir) throws FileNotFoundException {
-        List<String> params = new ArrayList<>();
-        Scanner in = new Scanner(new File(dir));
-
-        while (in.hasNext()) { // iterates each line in the file
-            String line = in.nextLine().trim();
-            if (line.contains("function")) {
-                line = line.substring(line.indexOf('(') + 1, line.length() - 1);
-                String[] listParam = line.split(",");
-                for (String param : listParam) {
-                    params.add(param);
-                }
-            }
-        }
-
-        in.close();
-        return params;
     }
 
     public double divide(String math) {
@@ -177,5 +188,26 @@ public class GenTest {
 
     public boolean isExistData(String data) {
         return listData.get(data) != null;
+    }
+
+    public Map<String, StringCondition> getListConditionOfStringValue(List<String> listDslCode, Map<String, StringCondition> listConditionOfStringValue) {
+        for (int i = 0; i < listDslCode.size(); i++) {
+            String code = listDslCode.get(i);
+            String[] tempCode = code.split(" ");
+            if (code.contains("str-regex")) {
+                listConditionOfStringValue.get(tempCode[1]).setRegex(tempCode[2]);
+            } else if (code.contains("str-def")) {
+                if (code.contains("length")) {
+                    String num = tempCode[tempCode.length - 1];
+                    listConditionOfStringValue.get(tempCode[1]).setLength(Integer.parseInt(num.substring(0, num.length() - 1)));
+                } else if (code.contains("contain-number")) {
+                    listConditionOfStringValue.get(tempCode[1]).setContainDigit(code.contains("true"));
+                } else if (code.contains("contain-letter")) {
+                    listConditionOfStringValue.get(tempCode[1]).setContainLetter(code.contains("true"));
+                }
+            }
+        }
+
+        return listConditionOfStringValue;
     }
 }
