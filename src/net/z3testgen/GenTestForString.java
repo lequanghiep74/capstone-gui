@@ -5,6 +5,7 @@ import com.microsoft.z3.*;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class GenTestForString {
@@ -19,7 +20,7 @@ public class GenTestForString {
         Tactic using = ctx.usingParams(smtTactic, p);
         //Read and parse file SMT2
         BoolExpr expr = ctx.parseSMTLIB2File("input/login.smt2", null, null, null, null);
-        List<String> params = new Helper().getParam("input/login.agt");
+        List<String> params = new Helper().getParam("input/login.agt", new HashMap<>());
 
         Solver s = ctx.mkSolver(using);    //invoke SMT solver
         s.setParameters(p);// set the parameter for random-seed

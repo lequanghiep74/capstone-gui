@@ -1,13 +1,20 @@
 package net.z3testgen;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by lequanghiep on 4/4/2017.
  */
 public class StringCondition {
     private boolean containDigit = true;
     private boolean containLetter = true;
-    private int length = 10;
     private String regex = "";
+    private String stringContain = "";
+    private int length;
+    private boolean isUseLength = false;
+    private List<String> listParamsContain = new ArrayList<>();
+    private List<String> listTestCaseUseLength = new ArrayList<>();
 
     public StringCondition() {
     }
@@ -28,19 +35,55 @@ public class StringCondition {
         this.containLetter = containLetter;
     }
 
-    public int getLength() {
-        return length;
-    }
-
-    public void setLength(int length) {
-        this.length = length;
-    }
-
     public String getRegex() {
         return regex;
     }
 
     public void setRegex(String regex) {
         this.regex = regex;
+    }
+
+    public String getStringContain() {
+        return stringContain;
+    }
+
+    public void setStringContain(String stringContain) {
+        this.stringContain = stringContain;
+    }
+
+    public boolean isUseLength() {
+        return isUseLength;
+    }
+
+    public void setUseLength(boolean useLength) {
+        isUseLength = useLength;
+    }
+
+    public List<String> getListParamsContain() {
+        return listParamsContain;
+    }
+
+    public void setListParamsContain(List<String> listParamsContain) {
+        this.listParamsContain = listParamsContain;
+    }
+
+    public List<String> getListTestCaseUseLength() {
+        return listTestCaseUseLength;
+    }
+
+    public void setListTestCaseUseLength(List<String> listTestCaseUseLength) {
+        this.listTestCaseUseLength = listTestCaseUseLength;
+    }
+
+    public void addListTestCaseUseLength(String testcase) {
+        this.listTestCaseUseLength.add(testcase);
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
     }
 }

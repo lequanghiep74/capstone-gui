@@ -1,23 +1,21 @@
 enum Triangle {EQUI ISO SCA NOT}
-function Triangle (Int a, Int b, Int c, String user , String pass)
+function Triangle (Int a, Int b, Int c, String user)
 precondition {a >= 0 && a <= 100 && b >= 0 && b <= 100 && c >= 0 && c <= 100}
-str-regex pass [a-z]{6,10}[@][a-z]{1,5}[.][a-z]{1,3}
-str-def user {length = 10}
-str-def user {contain-number = true}
-str-def user {contain-letter = true}
 define eq_ab {a = b}
 define eq_bc {b = c}
 define eq_ca {c = a}
 define tri1 {a + b > c}
 define tri2 {b + c > a}
 define tri3 {a + c > b}
+define userlength {user.length > 10}
+define usercontain {user.contain("@")}
 define tri {tri1 && tri2 && tri3}
 define iso1 {tri && eq_ab && !eq_bc}
 define iso2 {tri && eq_bc && !eq_ca}
 define iso3 {tri && eq_ca && !eq_ab}
 testcase {
-	"NOT" !tri
-	"EQUI" tri && eq_ab && eq_bc
+	"NOT" !tri || userlength
+	"EQUI" tri && eq_ab && eq_bc && usercontain
 	"ISO" iso1 || iso2 || iso3
 	"SCA"
 }

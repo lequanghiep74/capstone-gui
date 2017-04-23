@@ -2,9 +2,10 @@ package net.z3testgen;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class TranslateDsl {
-    public List<String> translateMydsl(List<String> listDslCode) {
+    public List<String> translateMydsl(List<String> listDslCode, Map<String, StringCondition> mapStringParams) {
         Itp itp = new Itp();
         List<String> listZ3Code = new ArrayList<>();
         for (int i = 0; i < listDslCode.size(); i++) {
@@ -26,11 +27,22 @@ public class TranslateDsl {
                 }
                 codeZ3 += "\n(declare-fun result ()" + code.split(" ")[1] + ")";
             } else if (code.contains("define")) {
-                codeZ3 = "define-fun ";
-                codeZ3 += code.split(" ")[1];
-                codeZ3 += " ()Bool ";
-                codeZ3 += itp.infixToPrefixConvert(code.substring(code.indexOf("{") + 1, code.indexOf("}")));
-                codeZ3 = "(" + codeZ3 + ")";
+                if (!code.contains(".contain(\"")) {
+                    if (code.contains(".length")) {
+                        code = code.replace(".length", "");
+                    }
+                    codeZ3 = "define-fun ";
+                    codeZ3 += code.split(" ")[1];
+                    codeZ3 += " ()Bool ";
+                    codeZ3 += itp.infixToPrefixConvert(code.substring(code.indexOf("{") + 1, code.indexOf("}")));
+                    codeZ3 = "(" + codeZ3 + ")";
+                } else {
+                    int beginIndex = code.indexOf("{");
+                    int endIndex = code.indexOf(".contain");
+                    String params = code.substring(beginIndex + 1, endIndex);
+                    StringCondition stringCondition = mapStringParams.get(params);
+                    stringCondition.getListParamsContain().add(code.split(" ")[1]);
+                }
             } else if (code.contains("run")) {
                 codeZ3 = "check-sat";
                 codeZ3 = "(" + codeZ3 + ")";
@@ -39,8 +51,12 @@ public class TranslateDsl {
                 for (int j = 0; j < params.length; j++) {
                     String[] com = params[j].trim().split(" ");
                     if (!com[0].equals("String")) {
-                        codeZ3 += "(declare-const " + com[1] + " "
-                                + com[0] + ")\n";
+                        codeZ3 += "(declare-const " + com[1] + " " + com[0] + ")\n";
+                    } else {
+                        StringCondition stringCondition = mapStringParams.get(com[1]);
+                        if (stringCondition.isUseLength()) {
+                            codeZ3 += "(declare-const " + com[1] + " Int)\n";
+                        }
                     }
                 }
             } else if (code.contains("testcase")) {
@@ -50,14 +66,26 @@ public class TranslateDsl {
                 code = listDslCode.get(i).replace("&&", "and").replace("||", "or").trim();
                 int open = 0;
                 while (code.charAt(0) != '}') {
+                    code = removeUnusedParamInCode(code, mapStringParams);
+                    //get list length condition which test case used
+                    List<String> paramsLengthUsed = new ArrayList<>();
+                    for (Map.Entry<String, StringCondition> entry : mapStringParams.entrySet()) {
+                        if (code.contains(entry.getKey().trim())) {
+                            paramsLengthUsed.add(entry.getKey().trim());
+                        }
+                    }
                     if (code.lastIndexOf("\"") != code.length() - 1) {
                         codeZ3 = "(if ";
                         code = code.substring(code.indexOf("\"") + 1);
                         int index = code.indexOf("\"");
                         String subCode = code.substring(index + 1).trim();
                         String tempCode = itp.infixToPrefixConvert(subCode);
-                        codeZ3 += parseNot(tempCode) + "\n";
-                        codeZ3 += code.substring(0, index);
+                        codeZ3 += parseNotSymbol(tempCode) + "\n";
+                        String nameTestCase = code.substring(0, index);
+                        for (String nameParam : paramsLengthUsed) {
+                            mapStringParams.get(nameParam).addListTestCaseUseLength(nameTestCase);
+                        }
+                        codeZ3 += nameTestCase;
 
                     } else {
                         codeZ3 = code.replaceAll("\"", "");
@@ -71,7 +99,7 @@ public class TranslateDsl {
                     codeZ3 += ")";
                 }
                 codeZ3 += "))";
-                listZ3Code.add(parseNot(codeZ3).replace("%", "mod"));
+                listZ3Code.add(parseNotSymbol(codeZ3).replace("%", "mod"));
                 codeZ3 = "";
             } else if (code.contains("precondition")) {
                 codeZ3 = "assert ";
@@ -79,13 +107,13 @@ public class TranslateDsl {
                 codeZ3 = "(" + codeZ3 + ")";
             }
             if (codeZ3.length() > 0) {
-                listZ3Code.add(parseNot(codeZ3).replace("%", "mod"));
+                listZ3Code.add(parseNotSymbol(codeZ3).replace("%", "mod"));
             }
         }
         return listZ3Code;
     }
 
-    public String parseNot(String s) {
+    public String parseNotSymbol(String s) {
         s = s.trim();
         if (s.contains("!")) {
             for (int i = 0; i < s.length(); i++) {
@@ -103,5 +131,30 @@ public class TranslateDsl {
             }
         }
         return s;
+    }
+
+    public String removeUnusedParamInCode(String code, Map<String, StringCondition> mapStringParams) {
+        for (Map.Entry<String, StringCondition> entry : mapStringParams.entrySet()) {
+            if (!entry.getValue().getStringContain().equals("")) {
+                for (String defName : entry.getValue().getListParamsContain()) {
+                    int beginIndex = code.indexOf(defName);
+                    int endIndex = code.indexOf(defName) + defName.length();
+                    int i = beginIndex - 1;
+                    while (i >= 2) {
+                        String text = code.substring(i - 3, i);
+                        if (text.equals("and") || text.equals(" or")) {
+                            i = i - 3;
+                            break;
+                        }
+                        i--;
+                    }
+                    if (i > 0) {
+                        beginIndex = i;
+                        code = code.replace(code.substring(beginIndex, endIndex), "");
+                    }
+                }
+            }
+        }
+        return code.trim();
     }
 }

@@ -24,7 +24,7 @@ public class GenString {
         }
         writer.append("\n");
 
-        varString = genTest.getListConditionOfStringValue(listDslCode, varString);
+//        varString = genTest.getListConditionOfStringValue(listDslCode, varString);
 
         for (int i = 0; i < 100; i++) {
             List<String> tempData = helper.generateStringData(varString);
