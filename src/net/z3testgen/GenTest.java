@@ -87,6 +87,7 @@ public class GenTest {
             FuncDecl[] listDecl = m.getConstDecls();
             //write header
             if (i == 0) {
+                boolean haveEndSymbol = false;
                 for (int j = 0; j < listDecl.length; j++) {
                     if (mapStringParams.get(listDecl[j].getName().toString()) == null) {
                         if (listDecl[j].getName().toString().equals("result")) {
@@ -95,8 +96,19 @@ public class GenTest {
                         writer.append(listDecl[j].getName().toString());
                         if (j != listDecl.length - 1) {
                             writer.append(",");
+                            haveEndSymbol = true;
+                        }
+                        else {
+                            haveEndSymbol = false;
                         }
                     }
+                    else {
+                        haveEndSymbol = false;
+                    }
+                }
+
+                if (listParamString.size() > 0 && haveEndSymbol) {
+                    writer.append(",");
                 }
 
                 List<String> listKey = new ArrayList<>();

@@ -40,8 +40,9 @@ public class TranslateDsl {
                     int beginIndex = code.indexOf("{");
                     int endIndex = code.indexOf(".contain");
                     String params = code.substring(beginIndex + 1, endIndex);
+                    String data = code.substring(code.indexOf("\"") + 1, code.lastIndexOf("\""));
                     StringCondition stringCondition = mapStringParams.get(params);
-                    stringCondition.getListParamsContain().add(code.split(" ")[1]);
+                    stringCondition.getMapParamsContain().put(code.split(" ")[1], data);
                 }
             } else if (code.contains("run")) {
                 codeZ3 = "check-sat";
@@ -136,9 +137,9 @@ public class TranslateDsl {
     public String removeUnusedParamInCode(String code, Map<String, StringCondition> mapStringParams) {
         for (Map.Entry<String, StringCondition> entry : mapStringParams.entrySet()) {
             if (!entry.getValue().getStringContain().equals("")) {
-                for (String defName : entry.getValue().getListParamsContain()) {
-                    int beginIndex = code.indexOf(defName);
-                    int endIndex = code.indexOf(defName) + defName.length();
+                for (Map.Entry<String, String> entryContain : entry.getValue().getMapParamsContain().entrySet()) {
+                    int beginIndex = code.indexOf(entryContain.getKey());
+                    int endIndex = code.indexOf(entryContain.getKey()) + entryContain.getKey().length();
                     int i = beginIndex - 1;
                     while (i >= 2) {
                         String text = code.substring(i - 3, i);

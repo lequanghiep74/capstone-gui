@@ -1,7 +1,9 @@
 package net.z3testgen;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by lequanghiep on 4/4/2017.
@@ -13,7 +15,7 @@ public class StringCondition {
     private String stringContain = "";
     private int length;
     private boolean isUseLength = false;
-    private List<String> listParamsContain = new ArrayList<>();
+    private Map<String, String> mapParamsContain = new HashMap<>();
     private List<String> listTestCaseUseLength = new ArrayList<>();
 
     public StringCondition() {
@@ -59,12 +61,12 @@ public class StringCondition {
         isUseLength = useLength;
     }
 
-    public List<String> getListParamsContain() {
-        return listParamsContain;
+    public Map<String, String> getMapParamsContain() {
+        return mapParamsContain;
     }
 
-    public void setListParamsContain(List<String> listParamsContain) {
-        this.listParamsContain = listParamsContain;
+    public void setMapParamsContain(Map<String, String> mapParamsContain) {
+        this.mapParamsContain = mapParamsContain;
     }
 
     public List<String> getListTestCaseUseLength() {

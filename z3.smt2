@@ -12,16 +12,18 @@
 (define-fun tri2 ()Bool (> (+ b c) a))
 (define-fun tri3 ()Bool (> (+ a c) b))
 (define-fun userlength ()Bool (> user 10))
+(define-fun userlength2 ()Bool (> user 15))
+(define-fun userlength3 ()Bool (> user 20))
 (define-fun tri ()Bool (and (and tri1 tri2) tri3))
 (define-fun iso1 ()Bool (and (and tri eq_ab) (not eq_bc)))
 (define-fun iso2 ()Bool (and (and tri eq_bc) (not eq_ca)))
 (define-fun iso3 ()Bool (and (and tri eq_ca) (not eq_ab)))
 (assert (= result
-(if (or (not tri) userlength)
+(if (and (not tri) userlength)
 NOT
-(if (and (and tri eq_ab) eq_bc)
+(if (and (and (and tri eq_ab) eq_bc) userlength2)
 EQUI
-(if (or (or iso1 iso2) iso3)
+(if (and (or (or iso1 iso2) iso3) userlength3)
 ISO
 SCA
 )))))

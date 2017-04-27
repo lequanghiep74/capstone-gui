@@ -1,5 +1,6 @@
 package net.z3testgen;
 
+import net.z3testgen.xeger.Xeger;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.swing.*;
@@ -65,12 +66,17 @@ public class Helper {
 
     public String generateStringDataByCondition(StringCondition stringCondition, int length) {
         String tempData = "";
-//        if (stringCondition.getRegex() != "") {
-//            Xeger generator = new Xeger(stringCondition.getRegex());
-//            tempData = generator.generate();
-//        } else {
-        tempData = RandomStringUtils.random(length, stringCondition.isContainLetter(), stringCondition.isContainDigit());
-//        }
+        if (stringCondition.getMapParamsContain().size() > 0) {
+            String regex = "[";
+            for (Map.Entry<String, String> entryContain : stringCondition.getMapParamsContain().entrySet()) {
+                regex += entryContain.getValue();
+            }
+            regex += "]{" + length + "}";
+            Xeger generator = new Xeger(regex);
+            tempData = generator.generate();
+        } else {
+            tempData = RandomStringUtils.random(length, stringCondition.isContainLetter(), stringCondition.isContainDigit());
+        }
         return tempData;
     }
 
@@ -109,6 +115,4 @@ public class Helper {
     public String getStringContain(String code) {
         return code.substring(code.indexOf(".contain(\"") + 10, code.lastIndexOf("\")"));
     }
-
-//    public
 }
