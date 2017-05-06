@@ -6,7 +6,10 @@ import javax.swing.*;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GenTest {
     private HashMap<String, String> listData;
@@ -36,7 +39,6 @@ public class GenTest {
         Map<String, IntExpr> listParamInt = new HashMap<>();
         Map<String, BoolExpr> listParamBool = new HashMap<>();
         Map<String, RealExpr> listParamReal = new HashMap<>();
-        Map<String, StringCondition> listParamString = new HashMap<>();
 
         //Get list params
         for (int i = 0; i < params.size(); i++) {
@@ -49,7 +51,7 @@ public class GenTest {
                 } else if (components[0].contains("Bool")) {
                     listParamBool.put(components[1], ctx.mkBoolConst(components[1]));
                 } else if (components[0].contains("String")) {
-                    listParamString.put(components[1], new StringCondition());
+                    listParamInt.put(components[1], ctx.mkIntConst(components[1]));
                 }
             } catch (Z3Exception e) {
                 e.printStackTrace();
@@ -79,7 +81,7 @@ public class GenTest {
 
         int i = 0;
         int indexResult = -1;
-        while (s.check() == Status.SATISFIABLE && i != 200) {
+        while (s.check() == Status.SATISFIABLE && i <= 200) {
             p.add("random_seed", i);
             s.setParameters(p);
 
@@ -87,64 +89,41 @@ public class GenTest {
             FuncDecl[] listDecl = m.getConstDecls();
             //write header
             if (i == 0) {
-                boolean haveEndSymbol = false;
+                String head = "";
                 for (int j = 0; j < listDecl.length; j++) {
-                    if (mapStringParams.get(listDecl[j].getName().toString()) == null) {
-                        if (listDecl[j].getName().toString().equals("result")) {
-                            indexResult = j;
-                        }
-                        writer.append(listDecl[j].getName().toString());
-                        if (j != listDecl.length - 1) {
-                            writer.append(",");
-                            haveEndSymbol = true;
-                        }
-                        else {
-                            haveEndSymbol = false;
-                        }
+                    if (listDecl[j].getName().toString().equals("result")) {
+                        indexResult = j;
                     }
-                    else {
-                        haveEndSymbol = false;
+                    head += listDecl[j].getName().toString();
+                    writer.append(listDecl[j].getName().toString());
+                    if (j != listDecl.length - 1) {
+                        head += ",";
+                        writer.append(",");
                     }
                 }
-
-                if (listParamString.size() > 0 && haveEndSymbol) {
-                    writer.append(",");
-                }
-
-                List<String> listKey = new ArrayList<>();
-                for (Map.Entry<String, StringCondition> entry : listParamString.entrySet()) {
-                    listKey.add(entry.getKey());
-                }
-                writer.append(String.join(",", listKey));
                 writer.append("\n");
             }
 
             String lineData = "";
-            String valOfResult = "";
             for (int j = 0; j < listDecl.length; j++) {
+                String stringData = null;
                 StringCondition stringCondition = mapStringParams.get(listDecl[j].getName().toString());
 
-                if (stringCondition == null) {
-                    String result = m.eval(m.getConstInterp(listDecl[j]), false).toString();
-                    if (j == indexResult) {
-                        valOfResult = result;
-                    }
-                    if (result.contains("/")) {
-                        DecimalFormat df = new DecimalFormat("#.##########");
-                        lineData += df.format(divide(result));
-                    } else {
-                        lineData += result;
-                    }
-                    if (j != listDecl.length - 1) {
-                        lineData += ",";
-                    }
-                } else {
-                    String result = m.eval(m.getConstInterp(listDecl[j]), false).toString();
-                    if (!valOfResult.equals("") && stringCondition.getListTestCaseUseLength().contains(valOfResult)) {
-                        lineData += helper.generateStringDataByCondition(stringCondition, Integer.parseInt(result));
-                    }
-                    lineData += ",";
+                String result = m.eval(m.getConstInterp(listDecl[j]), false).toString();
 
+                if (stringCondition != null) {
+                    stringData = helper.generateStringDataByCondition(stringCondition, Integer.parseInt(result));
+                }
+                if (stringData != null) {
+                    lineData += stringData;
+                } else if (result.contains("/")) {
+                    DecimalFormat df = new DecimalFormat("#.##########");
+                    lineData += df.format(divide(result));
+                } else {
+                    lineData += result;
+                }
+                if (j != listDecl.length - 1) {
+                    lineData += ",";
                 }
             }
             lineData = lineData.trim();

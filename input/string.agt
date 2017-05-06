@@ -1,24 +1,16 @@
-enum Triangle {EQUI ISO SCA NOT}
-function Triangle (Int a, Int b, Int c, String user)
-precondition {a >= 0 && a <= 100 && b >= 0 && b <= 100 && c >= 0 && c <= 100}
-define eq_ab {a = b}
-define eq_bc {b = c}
-define eq_ca {c = a}
-define tri1 {a + b > c}
-define tri2 {b + c > a}
-define tri3 {a + c > b}
-define userlength {user.length > 10}
-define userlength2 {user.length > 15}
-define userlength3 {user.length > 20}
-define usercontain {user.contain("testtest")}
-define tri {tri1 && tri2 && tri3}
-define iso1 {tri && eq_ab && !eq_bc}
-define iso2 {tri && eq_bc && !eq_ca}
-define iso3 {tri && eq_ca && !eq_ab}
+enum Register {SUCCESS FAIL INVALID}
+function Register (Int age, Int user, Int pass, Int email, Int firstName, Int lastName)
+precondition {age >= 0 && age <= 120 && pass > 0 && email > 0 && firstName > 0 && lastName > 0}
+define ageCon {age >= 18}
+define userLength {user > 10}
+define passLength {pass > 6}
+define emailLength {email > 10}
+define firstNameLength {firstName > 5}
+define lastNameLength {lastName > 5}
+define conSuccess {ageCon && userLength && passLength && emailLength && firstNameLength && lastNameLength}
 testcase {
-	"NOT" !tri && userlength
-	"EQUI" tri && eq_ab && eq_bc && usercontain && userlength2
-	"ISO" iso1 || iso2 || iso3 && userlength3
-	"SCA"
+	"SUCCESS" conSuccess
+	"FAIL" !conSuccess
+	"INVALID"
 }
 run

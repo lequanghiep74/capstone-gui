@@ -102,7 +102,7 @@ public class TranslateDsl {
                 codeZ3 += "))";
                 listZ3Code.add(parseNotSymbol(codeZ3).replace("%", "mod"));
                 codeZ3 = "";
-            } else if (code.contains("precondition")) {
+            } else if (code.contains("precondition") || code.contains("example")) {
                 codeZ3 = "assert ";
                 codeZ3 += itp.infixToPrefixConvert(code.substring(code.indexOf("{") + 1, code.indexOf("}")));
                 codeZ3 = "(" + codeZ3 + ")";
