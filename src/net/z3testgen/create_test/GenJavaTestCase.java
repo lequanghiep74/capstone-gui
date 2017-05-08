@@ -43,14 +43,15 @@ public class GenJavaTestCase {
     public void doing(String inputFile, String outputFile) {
         GenJavaTestCase mf = new GenJavaTestCase();
         try {
-
             ArrayList<String> list = mf.getAllLine(inputFile);
             mf.clearFile(outputFile);
-            String line = "import cucumber.api.java.en.Given\r\n" + "import cucumber.api.java.en.Then;\r\n"
+            String line = "import cucumber.api.java.en.Given;\r\n"
+                    + "import cucumber.api.java.en.Then;\r\n"
                     + "import cucumber.api.java.en.When;\r\n";
             mf.writeLine(outputFile, line);
             String className;
             for (String s : list) {
+                s = s.trim();
                 // Feature: triangle_cucumber
                 if (s.contains("Feature:")) {
                     String temp = s.replaceFirst("Feature:", "public class");
@@ -136,6 +137,7 @@ public class GenJavaTestCase {
                     mf.writeLine(outputFile, res);
                 }
             }
+            mf.writeLine(outputFile, "}");
 
         } catch (IOException e) {
             // TODO Auto-generated catch block
