@@ -9,11 +9,14 @@ public class CreateTestcaseBdd {
     public static void genTestCaseBdd(String uriDataTest, String uriBddFile, String outputFile) {
         String dirTestcase = getOutputDir(uriBddFile);
         new File(dirTestcase).mkdirs();
-        dirTestcase += "\\" + getFileName(new File(uriBddFile).getName()) + ".java";
+        String fileName = getFileName(new File(uriBddFile).getName());
+        String dirRunTestcase = dirTestcase + "\\" + fileName + "Test.java";
+        dirTestcase += "\\" + fileName + ".java";
         GenJavaTestCase genJavaTestCase = new GenJavaTestCase();
         genJavaTestCase.doing(uriBddFile, dirTestcase);
 
         ReadWriteFile readWriteFile = new ReadWriteFile();
+        readWriteFile.writeFile(fileRunTestcase(fileName), dirRunTestcase);
         List<String> datas = readWriteFile.readFile(uriDataTest);
         List<String> bdd = readWriteFile.readFile(uriBddFile);
 
@@ -27,6 +30,15 @@ public class CreateTestcaseBdd {
             bdd.add('|' + line.replace(",", "|") + "|");
         }
         readWriteFile.writeFile(bdd, outputFile);
+    }
+
+    private static String fileRunTestcase(String fileName) {
+        return "import cucumber.api.junit.Cucumber;\n" +
+                "import org.junit.runner.RunWith;\n" +
+                "\n" +
+                "@RunWith(Cucumber.class)\n" +
+                "public class " + fileName + "Test\n" +
+                "{}";
     }
 
     private static String getFileName(String name) {

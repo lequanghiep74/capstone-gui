@@ -27,7 +27,7 @@ public class TranslateDsl {
                 }
                 codeZ3 += "\n(declare-fun result ()" + code.split(" ")[1] + ")";
             } else if (code.contains("define")) {
-                if (!code.contains(".contain(\"") && !code.contains(".onlyDigit")) {
+                if (!code.contains(".contain(\"") && !code.contains(".onlyDigit") && !code.contains(".onlyLetter")) {
                     if (code.contains(".length")) {
                         code = code.replace(".length", "");
                     }
@@ -37,7 +37,8 @@ public class TranslateDsl {
                     codeZ3 += itp.infixToPrefixConvert(code.substring(code.indexOf("{") + 1, code.indexOf("}")));
                     codeZ3 = "(" + codeZ3 + ")";
                 } else {
-                    String type = code.contains(".contain") ? ".contain" : ".onlyDigit";
+                    String type = code.contains(".contain") ? ".contain" :
+                            (code.contains(".onlyDigit") ? ".onlyDigit" : "onlyLetter");
                     int beginIndex = code.indexOf("{");
                     int endIndex = code.indexOf(type);
                     String params = code.substring(beginIndex + 1, endIndex);
@@ -45,9 +46,12 @@ public class TranslateDsl {
                     if (code.contains(".contain")) {
                         String data = code.substring(code.indexOf("\"") + 1, code.lastIndexOf("\""));
                         stringCondition.getMapParamsContain().put(code.split(" ")[1], data);
-                    } else {
+                    } else if (code.contains(".onlyDigit")) {
                         stringCondition.setContainDigit(code.contains("true"));
                         stringCondition.setContainLetter(!code.contains("true"));
+                    } else if (code.contains(".onlyLetter")) {
+                        stringCondition.setContainLetter(code.contains("true"));
+                        stringCondition.setContainDigit(!code.contains("true"));
                     }
                 }
             } else if (code.contains("run")) {

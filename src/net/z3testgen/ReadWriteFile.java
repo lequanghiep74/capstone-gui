@@ -39,4 +39,14 @@ public class ReadWriteFile {
             // do something
         }
     }
+
+    public void writeFile(String data, String uri) {
+        try {
+            PrintWriter writer = new PrintWriter(uri, "UTF-8");
+            writer.println(data);
+            writer.close();
+        } catch (Exception e) {
+            // do something
+        }
+    }
 }
