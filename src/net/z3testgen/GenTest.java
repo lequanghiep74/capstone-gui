@@ -81,7 +81,9 @@ public class GenTest {
 
         int i = 0;
         int indexResult = -1;
-        while (s.check() == Status.SATISFIABLE) {
+        int limit = getLimit(listDslCode);
+        limit = limit == 0 ? 999999 : limit;
+        while (s.check() == Status.SATISFIABLE && i <= limit) {
             p.add("random_seed", i);
             s.setParameters(p);
 
@@ -171,14 +173,24 @@ public class GenTest {
         helper.setStatus("Success.");
     }
 
-    public double divide(String math) {
+    private double divide(String math) {
         int index = math.indexOf("/");
         String numA = math.substring(0, index);
         String numB = math.substring(index + 1);
         return Double.parseDouble(numA) / Double.parseDouble(numB);
     }
 
-    public boolean isExistData(String data) {
+    private boolean isExistData(String data) {
         return listData.get(data) != null;
+    }
+
+    private int getLimit(List<String> listDsl) {
+        int limit = 0;
+        for (String s : listDsl) {
+            if (s.contains("limit ")) {
+                limit = Integer.parseInt(s.trim().replace("limit ", ""));
+            }
+        }
+        return limit;
     }
 }
