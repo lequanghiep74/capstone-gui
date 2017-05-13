@@ -1,0 +1,18 @@
+enum Register {SUCCESS FAIL INVALID}
+function Register (Int age, String user, String PIN, String email)
+define ageCon {age >= 18}
+define pinDigit {PIN.onlyDigit = true}
+define userLength {user.length >= 6}
+define pinLength {PIN.length = 6}
+define emailContain {email.contain("@")}
+define conSuccess {ageCon && userLength && pinLength}
+define conFail {!ageCon || !userLength || !pinLength}
+precondition {age >= 0 && age <= 50}
+precondition {PIN.length > 0 && PIN.length <= 20}
+precondition {email.length > 0 && email.length < 30 && user.length > 0 && user.length <= 50}
+testcase {
+ "SUCCESS" conSuccess && emailContain
+ "FAIL" conFail || !emailContain
+ "INVALID"
+}
+run

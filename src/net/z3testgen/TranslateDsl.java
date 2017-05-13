@@ -27,7 +27,7 @@ public class TranslateDsl {
                 }
                 codeZ3 += "\n(declare-fun result ()" + code.split(" ")[1] + ")";
             } else if (code.contains("define")) {
-                if (!code.contains(".contain(\"")) {
+                if (!code.contains(".contain(\"") && !code.contains(".onlyDigit")) {
                     if (code.contains(".length")) {
                         code = code.replace(".length", "");
                     }
@@ -37,12 +37,18 @@ public class TranslateDsl {
                     codeZ3 += itp.infixToPrefixConvert(code.substring(code.indexOf("{") + 1, code.indexOf("}")));
                     codeZ3 = "(" + codeZ3 + ")";
                 } else {
+                    String type = code.contains(".contain") ? ".contain" : ".onlyDigit";
                     int beginIndex = code.indexOf("{");
-                    int endIndex = code.indexOf(".contain");
+                    int endIndex = code.indexOf(type);
                     String params = code.substring(beginIndex + 1, endIndex);
-                    String data = code.substring(code.indexOf("\"") + 1, code.lastIndexOf("\""));
                     StringCondition stringCondition = mapStringParams.get(params);
-                    stringCondition.getMapParamsContain().put(code.split(" ")[1], data);
+                    if (code.contains(".contain")) {
+                        String data = code.substring(code.indexOf("\"") + 1, code.lastIndexOf("\""));
+                        stringCondition.getMapParamsContain().put(code.split(" ")[1], data);
+                    } else {
+                        stringCondition.setContainDigit(code.contains("true"));
+                        stringCondition.setContainLetter(!code.contains("true"));
+                    }
                 }
             } else if (code.contains("run")) {
                 codeZ3 = "check-sat";
@@ -103,6 +109,7 @@ public class TranslateDsl {
                 listZ3Code.add(parseNotSymbol(codeZ3).replace("%", "mod"));
                 codeZ3 = "";
             } else if (code.contains("precondition") || code.contains("example")) {
+                code = code.replace(".length", "");
                 codeZ3 = "assert ";
                 codeZ3 += itp.infixToPrefixConvert(code.substring(code.indexOf("{") + 1, code.indexOf("}")));
                 codeZ3 = "(" + codeZ3 + ")";

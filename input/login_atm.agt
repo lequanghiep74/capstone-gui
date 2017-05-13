@@ -1,0 +1,15 @@
+enum Login {SUCCESS FAIL INVALID}
+function Login (String user, String PIN)
+define userLength {user.length >= 6 && user.length <= 50}
+define pinLength {PIN.length = 6}
+define pinDigit {PIN.onlyDigit = true}
+define conSuccess {userLength && pinLength}
+define conFail {!userLength || !pinLength}
+precondition {PIN.length > 0 && PIN.length <= 20}
+precondition {user.length > 0 && user.length <= 50}
+testcase {
+ "SUCCESS" conSuccess
+ "FAIL" conFail
+ "INVALID"
+}
+run

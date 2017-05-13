@@ -1,0 +1,14 @@
+WITHDRAWAL
+enum Withdrawal {SUCCESS FAIL INVALID}
+function Withdrawal (Int money)
+define moneyCon {money % 50000 = 0}
+define moneyLength {money <= 5000000}
+define conSuccess {moneyCon && moneyLength}
+define conFail {!moneyCon || !moneyLength}
+precondition {money > 0 && money <= 5000000}
+testcase {
+ "SUCCESS" conSuccess
+ "FAIL" conFail
+ "INVALID"
+}
+run

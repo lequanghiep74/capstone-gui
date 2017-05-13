@@ -81,7 +81,7 @@ public class GenTest {
 
         int i = 0;
         int indexResult = -1;
-        while (s.check() == Status.SATISFIABLE && i <= 200) {
+        while (s.check() == Status.SATISFIABLE) {
             p.add("random_seed", i);
             s.setParameters(p);
 

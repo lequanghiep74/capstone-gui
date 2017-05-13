@@ -14,7 +14,7 @@ public class StringCondition {
     private String regex = "";
     private String stringContain = "";
     private int length;
-    private boolean isUseLength = false;
+    private boolean isUseLength = true;
     private Map<String, String> mapParamsContain = new HashMap<>();
     private List<String> listTestCaseUseLength = new ArrayList<>();
 

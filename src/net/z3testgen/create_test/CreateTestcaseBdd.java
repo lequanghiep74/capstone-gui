@@ -5,9 +5,6 @@ import net.z3testgen.ReadWriteFile;
 import java.io.File;
 import java.util.List;
 
-/**
- * Created by lequanghiep on 11/15/2016.
- */
 public class CreateTestcaseBdd {
     public static void genTestCaseBdd(String uriDataTest, String uriBddFile, String outputFile) {
         String dirTestcase = getOutputDir(uriBddFile);
@@ -19,6 +16,12 @@ public class CreateTestcaseBdd {
         ReadWriteFile readWriteFile = new ReadWriteFile();
         List<String> datas = readWriteFile.readFile(uriDataTest);
         List<String> bdd = readWriteFile.readFile(uriBddFile);
+
+        for (int i = 0; i < bdd.size(); i++) {
+            bdd.set(i, bdd.get(i).replace("|int", ""));
+            bdd.set(i, bdd.get(i).replace("|String", ""));
+        }
+
         bdd.add("\nExamples:");
         for (String line : datas) {
             bdd.add('|' + line.replace(",", "|") + "|");

@@ -78,7 +78,7 @@ public class GenJavaTestCase {
                     // @Given("^I have three number is (\\d+), (\\d+) and
                     // ([^\"]*)$"
                     String xx = s.split(" ")[0];
-                    String temp = s.replace(xx, "@" + xx + "(\"^");
+                    String temp = s.replace(xx + " ", "@" + xx + "(\"^");
                     String res = temp;
                     ArrayList<Name> arr = new ArrayList<>();
                     ArrayList<String> as = new ArrayList<>();
@@ -99,9 +99,9 @@ public class GenJavaTestCase {
 
                     for (String string : as) {
                         if (string.contains("int")) {
-                            res = res.replace(string, "(\\\\d+)");
+                            res = res.replace(string, "\\\\+?(-?\\\\d+)");
                         } else {
-                            res = res.replace(string, "([^\\\"]*)$");
+                            res = res.replace(string, "([^\\\"]*)");
                         }
                         String tmp = "";
                         for (int i = 1; i < string.length() - 1; i++) {
@@ -116,7 +116,7 @@ public class GenJavaTestCase {
                         n.setMethod(method);
                         arr.add(n);
                     }
-                    res += "\")";
+                    res += "$\")";
 
 
                     res += "\r\n";

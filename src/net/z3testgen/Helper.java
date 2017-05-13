@@ -74,6 +74,7 @@ public class Helper {
 //            Xeger generator = new Xeger(regex);
 //            tempData = generator.generate();
 //        } else {
+
             tempData = RandomStringUtils.random(length, stringCondition.isContainLetter(), stringCondition.isContainDigit());
 //        }
         return tempData;
@@ -83,14 +84,9 @@ public class Helper {
         Map<String, StringCondition> mapStringParams = new HashMap<>();
 
         for (String code : dsl) {
-            if (code.contains(".length") || code.contains(".contain")) {
-                boolean isLength = false;
+            if ((code.contains(".length") || code.contains(".contain") || code.contains(".onlyDigit")) && code.contains("define")) {
                 String stringContain = "";
                 String param = code.substring(code.indexOf("{") + 1, code.indexOf("."));
-
-                if (code.contains(".length")) {
-                    isLength = true;
-                }
 
                 if (code.contains(".contain")) {
                     stringContain = getStringContain(code);
@@ -98,7 +94,6 @@ public class Helper {
 
                 if (mapStringParams.get(param) == null) {
                     StringCondition stringCondition = new StringCondition();
-                    stringCondition.setUseLength(isLength);
                     stringCondition.setStringContain(stringContain);
                     mapStringParams.put(param, stringCondition);
                 } else {

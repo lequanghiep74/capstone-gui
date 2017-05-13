@@ -1,20 +1,24 @@
-enum Triangle {EQUI ISO SCA NOT}
+enum Triangle {EQUI ISO SCA NOT INVALID}
 function Triangle (Int a, Int b, Int c)
-precondition {a >= 0 && a <= 100 && b >= 0 && b <= 100 && c >= 0 && c <= 100}
+precondition {a >= -4 && b >= -4 && c >= -4 && a <= 30 && b <= 30 && c <= 30}
 define eq_ab {a = b}
 define eq_bc {b = c}
 define eq_ca {c = a}
 define tri1 {a + b > c}
 define tri2 {b + c > a}
 define tri3 {a + c > b}
+define equi1 {eq_ab && eq_bc}
+define equi2 {eq_bc && eq_ca}
+define equi3 {eq_ca && eq_ab}
 define tri {tri1 && tri2 && tri3}
 define iso1 {tri && eq_ab && !eq_bc}
 define iso2 {tri && eq_bc && !eq_ca}
 define iso3 {tri && eq_ca && !eq_ab}
 testcase {
-	"NOT" !tri
-	"EQUI" tri && eq_ab && eq_bc
-	"ISO" iso1 || iso2 || iso3
-	"SCA"
+"INVALID" a <= 0 || b <= 0 || c <= 0
+"NOT" !tri
+"EQUI" tri && ( equi1 || equi2 || equi3 )
+"ISO" iso1 || iso2 || iso3
+"SCA"
 }
 run

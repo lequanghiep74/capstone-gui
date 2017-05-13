@@ -1,0 +1,14 @@
+enum Transfer {SUCCESS FAIL INVALID}
+function Transfer (String user, Int money)
+define moneyCon {money % 50000 = 0}
+define userLength {user.length >= 6 && user.length <= 50}
+define moneyLength {money <= 100000000}
+define conSuccess {moneyCon && moneyLength  && userLength}
+define conFail {!moneyCon || !moneyLength || !userLength}
+precondition {user.length > 0 && user.length <= 50 && money > 0 && money <= 100000000}
+testcase {
+ "SUCCESS" conSuccess
+ "FAIL" conFail
+ "INVALID"
+}
+run

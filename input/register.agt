@@ -4,7 +4,7 @@ define ageCon {age >= 18}
 define userLength {user.length > 10}
 define passLength {pass.length > 6}
 define emailLength {email.length > 10}
-define emailContaint {email.contain("@")}
+define emailContain {email.contain("@")}
 define firstNameLength {firstName.length > 5}
 define lastNameLength {lastName.length > 5}
 define conSuccess {ageCon && userLength && passLength && emailLength && firstNameLength && lastNameLength}
