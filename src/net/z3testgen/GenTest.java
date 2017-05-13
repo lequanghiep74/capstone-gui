@@ -107,6 +107,13 @@ public class GenTest {
             }
 
             String lineData = "";
+            String resultTemp = "";
+            for (int j = 0; j < listDecl.length; j++) {
+                if (listDecl[j].getName().toString().equals("result")) {
+                    resultTemp = m.eval(m.getConstInterp(listDecl[j]), false).toString();
+                }
+            }
+
             for (int j = 0; j < listDecl.length; j++) {
                 String stringData = null;
                 StringCondition stringCondition = mapStringParams.get(listDecl[j].getName().toString());
@@ -114,7 +121,7 @@ public class GenTest {
                 String result = m.eval(m.getConstInterp(listDecl[j]), false).toString();
 
                 if (stringCondition != null) {
-                    stringData = helper.generateStringDataByCondition(stringCondition, Integer.parseInt(result));
+                    stringData = helper.generateStringDataByCondition(stringCondition, Integer.parseInt(result), resultTemp);
                 }
                 if (stringData != null) {
                     lineData += stringData;

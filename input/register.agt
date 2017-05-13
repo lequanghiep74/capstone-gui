@@ -13,7 +13,7 @@ define ageB {age = 50}
 precondition {age >= 0 && age <= 120 && pass > 0 && pass < 30}
 precondition {email > 0 && email < 30 && firstName > 0 && firstName < 50 && lastName > 0 && lastName < 50  && user > 0 && user < 30}
 testcase {
-	"SUCCESS" conSuccess
+	"SUCCESS" conSuccess && emailContain
 	"FAIL" conFail
 	"INVALID"
 }

@@ -63,21 +63,29 @@ public class Helper {
         return tempData;
     }
 
-    public String generateStringDataByCondition(StringCondition stringCondition, int length) {
+    public String generateStringDataByCondition(StringCondition stringCondition, int length, String testcase) {
         String tempData = "";
-//        if (stringCondition.getMapParamsContain().size() > 0) {
-//            String regex = "(\\w|";
-//            for (Map.Entry<String, String> entryContain : stringCondition.getMapParamsContain().entrySet()) {
-//                regex += entryContain.getValue() + "|";
-//            }
-//            regex += "\\w){" + length + "}";
-//            Xeger generator = new Xeger(regex);
-//            tempData = generator.generate();
-//        } else {
-
+        String contain = stringCondition.getMapParamsContain().get(stringCondition.getMapTestCaseUseContain().get(testcase));
+        if (contain != null) {
+            tempData = genStringWithContain(length, contain, stringCondition);
+        } else {
             tempData = RandomStringUtils.random(length, stringCondition.isContainLetter(), stringCondition.isContainDigit());
-//        }
+        }
         return tempData;
+    }
+
+    private String genStringWithContain(int length, String contain, StringCondition stringCondition) {
+        String s = "";
+        if (contain.length() > length) {
+            s = RandomStringUtils.random(length, stringCondition.isContainLetter(), stringCondition.isContainDigit());
+        } else {
+            int lengthAnother = length - contain.length() + 1;
+            int index = new Random().nextInt(lengthAnother);
+            s = RandomStringUtils.random(index + 1, stringCondition.isContainLetter(), stringCondition.isContainDigit())
+                    + contain
+                    + RandomStringUtils.random(lengthAnother - index, stringCondition.isContainLetter(), stringCondition.isContainDigit());
+        }
+        return s;
     }
 
     public Map<String, StringCondition> getMapStringParam(List<String> dsl) {

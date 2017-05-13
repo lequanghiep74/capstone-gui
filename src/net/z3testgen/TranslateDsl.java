@@ -151,6 +151,15 @@ public class TranslateDsl {
                 for (Map.Entry<String, String> entryContain : entry.getValue().getMapParamsContain().entrySet()) {
                     int beginIndex = code.indexOf(entryContain.getKey());
                     int endIndex = code.indexOf(entryContain.getKey()) + entryContain.getKey().length();
+                    if (beginIndex > -1) {
+                        String temp = code.substring(1);
+                        Map<String, String> mapTestCon = entry.getValue().getMapTestCaseUseContain();
+                        mapTestCon.put(
+                                temp.substring(0, temp.indexOf("\"")),
+                                entryContain.getKey().toString()
+                        );
+                        entry.getValue().setMapTestCaseUseContain(mapTestCon);
+                    }
                     int i = beginIndex - 1;
                     while (i >= 2) {
                         String text = code.substring(i - 3, i);

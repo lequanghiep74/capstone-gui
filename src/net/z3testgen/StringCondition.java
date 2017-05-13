@@ -17,6 +17,7 @@ public class StringCondition {
     private boolean isUseLength = true;
     private Map<String, String> mapParamsContain = new HashMap<>();
     private List<String> listTestCaseUseLength = new ArrayList<>();
+    private Map<String, String> mapTestCaseUseContain = new HashMap<>();
 
     public StringCondition() {
     }
@@ -75,6 +76,14 @@ public class StringCondition {
 
     public void setListTestCaseUseLength(List<String> listTestCaseUseLength) {
         this.listTestCaseUseLength = listTestCaseUseLength;
+    }
+
+    public Map<String, String> getMapTestCaseUseContain() {
+        return mapTestCaseUseContain;
+    }
+
+    public void setMapTestCaseUseContain(Map<String, String> mapTestCaseUseContain) {
+        this.mapTestCaseUseContain = mapTestCaseUseContain;
     }
 
     public void addListTestCaseUseLength(String testcase) {
