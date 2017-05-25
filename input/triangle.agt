@@ -1,7 +1,7 @@
 enum Triangle {EQUI ISO SCA NOT INVALID}
 function Triangle (Int a, Int b, Int c)
 limit 500
-precondition {a >= -4 && b >= -4 && c >= -4}
+precondition {a >= -4 && b >= -4 && c >= -4 && a <= 30 && b <= 30 && c <= 30}
 define eq_ab {a = b}
 define eq_bc {b = c}
 define eq_ca {c = a}

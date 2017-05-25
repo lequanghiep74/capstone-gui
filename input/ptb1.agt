@@ -1,0 +1,12 @@
+enum ptb1 {CN VN INVALID}
+function ptb1 (Int a, Int b)
+limit 500
+precondition {a >= -3 && b >= -3 && a <= 20 && b <= 20}
+define con1 {a = 0}
+define con2 {b = 0}
+testcase {
+"CN" !con1
+"VN" !con2 && con1
+"INVALID"
+}
+run

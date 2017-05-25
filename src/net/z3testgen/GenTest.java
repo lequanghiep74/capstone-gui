@@ -83,7 +83,7 @@ public class GenTest {
         int indexResult = -1;
         int limit = getLimit(listDslCode);
         limit = limit == 0 ? 999999 : limit;
-        while (s.check() == Status.SATISFIABLE && i <= limit) {
+        while (s.check() == Status.SATISFIABLE && i < limit) {
             p.add("random_seed", i);
             s.setParameters(p);
 
@@ -194,7 +194,7 @@ public class GenTest {
     private int getLimit(List<String> listDsl) {
         int limit = 0;
         for (String s : listDsl) {
-            if (s.contains("limit ")) {
+            if (s.trim().indexOf("limit ") == 0) {
                 limit = Integer.parseInt(s.trim().replace("limit ", ""));
             }
         }
